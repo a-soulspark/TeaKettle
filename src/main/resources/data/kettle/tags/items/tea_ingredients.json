@@ -1,0 +1,10 @@
+{
+	"values": [
+		"kettle:tea_leaf",
+		"kettle:white_tea_leaf",
+		"kettle:oolong_tea_leaf",
+		"kettle:black_tea_leaf",
+		"kettle:rose_petal",
+		"kettle:bamboo_leaf"
+	]
+}

@@ -1,0 +1,34 @@
+{
+	"type": "minecraft:block",
+	"pools": [
+		{
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"functions": [
+						{
+							"function": "minecraft:copy_nbt",
+							"source": "block_entity",
+							"ops": [
+								{
+									"source": "BoilingTicks",
+									"target": "BlockEntityTag.BoilingTicks",
+									"op": "replace"
+								}
+							]
+						},
+						{
+							"function": "minecraft:copy_state",
+							"block": "kettle:kettle",
+							"properties": [
+								"content"
+							]
+						}
+					],
+					"name": "kettle:kettle"
+				}
+			]
+		}
+	]
+}

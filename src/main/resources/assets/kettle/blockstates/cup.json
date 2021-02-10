@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "kettle:block/cup", "y": 180 },
+		"facing=west": { "model": "kettle:block/cup", "y": 90 },
+		"facing=south": { "model": "kettle:block/cup" },
+		"facing=east": { "model": "kettle:block/cup", "y": 270 }
+	}
+}

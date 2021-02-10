@@ -1,0 +1,24 @@
+{
+	"multipart": [
+		{
+			"apply": { "model": "kettle:block/kettle", "y": 180 },
+			"when": { "facing": "north" }
+		},
+		{
+			"apply": { "model": "kettle:block/kettle", "y": 90 },
+			"when": { "facing": "west" }
+		},
+		{
+			"apply": { "model": "kettle:block/kettle" },
+			"when": { "facing": "south" }
+		},
+		{
+			"apply": { "model": "kettle:block/kettle", "y": 270 },
+			"when": { "facing": "east" }
+		},
+		{
+			"apply": { "model": "kettle:block/kettle_lid" },
+			"when": { "content": "water|hot_water" }
+		}
+	]
+}

@@ -1,0 +1,6 @@
+{
+	"parent": "kettle:block/tea",
+	"textures": {
+		"fluid": "kettle:block/teas/bamboo_tea"
+	}
+}
