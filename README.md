@@ -1,4 +1,4 @@
-# Tea Kettle
+# ![Kettle](https://github.com/a-soulspark/Kettle/wiki/kettle.png "Kettle") Tea Kettle
 ![Teas](https://github.com/a-soulspark/Kettle/wiki/teas_screenshot.png "Tea Kettle teas")
 
 A Minecraft mod that adds delightful tea drinks.
