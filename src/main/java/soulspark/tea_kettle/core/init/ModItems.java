@@ -35,7 +35,7 @@ public class ModItems {
 	
 	public static final RegistryObject<TeaItem> OOLONG_TEA = ITEMS.register("oolong_tea", () ->
 			new TeaItem(ModBlocks.OOLONG_TEA.get(), new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).food(new Food.Builder().hunger(3).saturation(0.3f)
-					.effect(new EffectInstance(Effects.ABSORPTION, 400, 0), 1)
+					.effect(new EffectInstance(Effects.ABSORPTION, 300, 0), 1)
 					.effect(() -> new EffectInstance(ModEffects.CAFFEINE.get(), 1800, 0), 1).build())));
 	
 	public static final RegistryObject<TeaItem> BLACK_TEA = ITEMS.register("black_tea", () ->
