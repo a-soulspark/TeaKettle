@@ -25,13 +25,13 @@ public class ModItems {
 	
 	public static final RegistryObject<TeaItem> GREEN_TEA = ITEMS.register("green_tea", () ->
 			new TeaItem(ModBlocks.GREEN_TEA.get(), new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).food(new Food.Builder().hunger(4).saturation(0.2f)
-					.effect(new EffectInstance(Effects.REGENERATION, 160, 0), 1)
+					.effect(new EffectInstance(Effects.REGENERATION, 240, 0), 1)
 					.effect(() -> new EffectInstance(ModEffects.CAFFEINE.get(), 900, 0), 1).build())));
 	
 	public static final RegistryObject<TeaItem> WHITE_TEA = ITEMS.register("white_tea", () ->
 			new TeaItem(ModBlocks.WHITE_TEA.get(), new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).food(new Food.Builder().hunger(4).saturation(0.2f)
-					.effect(new EffectInstance(Effects.REGENERATION, 160, 0), 1)
-					.effect(() -> new EffectInstance(ModEffects.CAFFEINE.get(), 100, 0), 1).build())));
+					.effect(new EffectInstance(Effects.REGENERATION, 240, 0), 1)
+					.effect(() -> new EffectInstance(ModEffects.CAFFEINE.get(), 150, 0), 1).build())));
 	
 	public static final RegistryObject<TeaItem> OOLONG_TEA = ITEMS.register("oolong_tea", () ->
 			new TeaItem(ModBlocks.OOLONG_TEA.get(), new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).food(new Food.Builder().hunger(4).saturation(0.3f)
@@ -45,7 +45,7 @@ public class ModItems {
 	
 	public static final RegistryObject<TeaItem> BAMBOO_TEA = ITEMS.register("bamboo_tea", () ->
 			new TeaItem(ModBlocks.BAMBOO_TEA.get(), new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).food(new Food.Builder().hunger(4).saturation(0.3f)
-					.effect(new EffectInstance(Effects.RESISTANCE, 200, 0), 1).build())));
+					.effect(new EffectInstance(Effects.RESISTANCE, 300, 0), 1).build())));
 	
 	// TODO: make kettle not empty when in creative
 	
