@@ -1,6 +1,0 @@
-{
-	"parent": "kettle:item/kettle",
-	"textures": {
-		"layer0": "kettle:item/kettle_hot_water_full"
-	}
-}

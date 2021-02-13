@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "tea_kettle:rose_petal"
+        }
+    ],
+    "result": {
+        "item": "minecraft:red_dye",
+        "count": 1
+    },
+    "group": "red_dye"
+}

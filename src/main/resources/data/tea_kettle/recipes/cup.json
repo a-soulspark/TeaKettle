@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"# #",
+		"###"
+	],
+	"key": {
+		"#": {
+			"item": "minecraft:brick"
+		}
+	},
+	"result": {
+		"item": "tea_kettle:cup",
+		"count": 1
+	}
+}

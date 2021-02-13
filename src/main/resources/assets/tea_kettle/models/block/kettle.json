@@ -1,0 +1,60 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/cube",
+	"texture_size": [8, 18],
+	"textures": {
+		"0": "tea_kettle:block/kettle",
+		"particle": "tea_kettle:block/kettle"
+	},
+	"elements": [
+		{
+			"name": "handle",
+			"from": [5, 6, 8],
+			"to": [11, 9, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 14, 15]},
+			"faces": {
+				"north": {"uv": [0, 12.44444, 12, 15.11111], "texture": "#0"},
+				"east": {"uv": [16, 0, 16, 1.77778], "texture": "#0"},
+				"south": {"uv": [0, 12.44444, 12, 15.11111], "texture": "#0"},
+				"west": {"uv": [16, 0, 16, 1.77778], "texture": "#0"},
+				"up": {"uv": [16, 0, 24, 0], "texture": "#0"},
+				"down": {"uv": [16, 0, 24, 0], "texture": "#0"}
+			}
+		},
+		{
+			"name": "spout",
+			"from": [12, 3, 8],
+			"to": [15, 5, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [20, 12, 14]},
+			"faces": {
+				"north": {"uv": [16, 12.44444, 12, 15.11111], "rotation": 90, "texture": "#0"},
+				"east": {"uv": [0, 0, 0, 1.77778], "texture": "#0"},
+				"south": {"uv": [12, 12.44444, 16, 15.11111], "rotation": 270, "texture": "#0"},
+				"west": {"uv": [0, 0, 0, 1.77778], "texture": "#0"},
+				"up": {"uv": [0, 0, 6, 0], "texture": "#0"},
+				"down": {"uv": [0, 0, 6, 0], "texture": "#0"}
+			}
+		},
+		{
+			"name": "body",
+			"from": [4, 0, 4],
+			"to": [12, 6, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 8, 15]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 5.33333], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 5.33333], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 5.33333], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 5.33333], "texture": "#0"},
+				"up": {"uv": [0, 5.33333, 16, 12.44444], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 7.11111], "texture": "#0", "cullface": "down"}
+			}
+		}
+	],
+	"groups": [0, 1,
+		{
+			"name": "VoxelShapes",
+			"origin": [8, 8, 8],
+			"children": [2]
+		}
+	]
+}

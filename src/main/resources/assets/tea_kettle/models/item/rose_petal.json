@@ -1,0 +1,6 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "tea_kettle:item/rose_petal"
+	}
+}

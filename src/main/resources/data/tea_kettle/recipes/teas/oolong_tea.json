@@ -1,0 +1,5 @@
+{
+	"type": "tea_kettle:tea_steeping",
+	"ingredient": { "item": "tea_kettle:oolong_tea_leaf" },
+	"result": "tea_kettle:oolong_tea"
+}

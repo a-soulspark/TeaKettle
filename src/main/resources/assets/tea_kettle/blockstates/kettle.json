@@ -1,0 +1,24 @@
+{
+	"multipart": [
+		{
+			"apply": { "model": "tea_kettle:block/kettle", "y": 180 },
+			"when": { "facing": "north" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/kettle", "y": 90 },
+			"when": { "facing": "west" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/kettle" },
+			"when": { "facing": "south" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/kettle", "y": 270 },
+			"when": { "facing": "east" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/kettle_lid" },
+			"when": { "content": "water|hot_water" }
+		}
+	]
+}

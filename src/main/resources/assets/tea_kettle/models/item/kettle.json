@@ -1,0 +1,42 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "tea_kettle:item/kettle"
+	},
+	"display": {
+		"firstperson_righthand": {
+			"rotation": [0, 90, 0],
+			"translation": [0, 2, -1],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -90, 0],
+			"translation": [0, 2, -1],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"thirdperson_righthand": {
+			"rotation": [75, 90, 0],
+			"translation": [0, 0, -2.5],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, -90, 0],
+			"translation": [0, 0, -2.5],
+			"scale": [0.75, 0.75, 0.75]
+		}
+	},
+	"overrides": [
+		{
+			"predicate": { "tea_kettle:content": 0.5 },
+			"model": "tea_kettle:item/kettle_water"
+		},
+		{
+			"predicate": { "tea_kettle:content": 0.75 },
+			"model": "tea_kettle:item/kettle_hot_water"
+		},
+		{
+			"predicate": { "tea_kettle:content": 1 },
+			"model": "tea_kettle:item/kettle_hot_water_full"
+		}
+	]
+}

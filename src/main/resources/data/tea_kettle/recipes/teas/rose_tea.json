@@ -1,0 +1,5 @@
+{
+	"type": "tea_kettle:tea_steeping",
+	"ingredient": { "item": "tea_kettle:rose_petal" },
+	"result": "tea_kettle:rose_tea"
+}

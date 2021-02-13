@@ -1,6 +1,0 @@
-{
-	"parent": "kettle:block/tea",
-	"textures": {
-		"fluid": "kettle:block/teas/green_tea"
-	}
-}

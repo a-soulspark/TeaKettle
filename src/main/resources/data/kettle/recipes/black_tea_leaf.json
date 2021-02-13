@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:campfire_cooking",
-    "ingredient": {
-        "item": "kettle:oolong_tea_leaf"
-    },
-    "result": "kettle:black_tea_leaf",
-    "experience": 0.1,
-    "cookingtime": 400
-}

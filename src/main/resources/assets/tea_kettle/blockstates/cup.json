@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "tea_kettle:block/cup", "y": 180 },
+		"facing=west": { "model": "tea_kettle:block/cup", "y": 90 },
+		"facing=south": { "model": "tea_kettle:block/cup" },
+		"facing=east": { "model": "tea_kettle:block/cup", "y": 270 }
+	}
+}

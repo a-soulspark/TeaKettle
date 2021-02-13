@@ -1,0 +1,25 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/cube",
+	"texture_size": [8, 18],
+	"textures": {
+		"0": "tea_kettle:block/kettle",
+		"particle": "tea_kettle:block/kettle"
+	},
+	"elements": [
+		{
+			"name": "lid",
+			"from": [6, 6, 6],
+			"to": [10, 7, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 14, 15]},
+			"faces": {
+				"north": {"uv": [0, 4.44444, 8, 5.33333], "texture": "#0"},
+				"east": {"uv": [8, 4.44444, 16, 5.33333], "texture": "#0"},
+				"south": {"uv": [0, 4.44444, 8, 5.33333], "texture": "#0"},
+				"west": {"uv": [8, 4.44444, 16, 5.33333], "texture": "#0"},
+				"up": {"uv": [4, 1.77778, 12, 5.33333], "texture": "#0"},
+				"down": {"uv": [0, 0, 8, 3.55556], "texture": "#0", "cullface": "down"}
+			}
+		}
+	]
+}
