@@ -15,6 +15,7 @@ public class ClientInitEvents {
 	@SubscribeEvent
 	public static void onClientSetupEvent(FMLClientSetupEvent event) {
 		RenderTypeLookup.setRenderLayer(ModBlocks.KETTLE.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModBlocks.CUP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.TEA_BUSH.get(), RenderType.getCutout());
 		
 		RenderTypeLookup.setRenderLayer(ModBlocks.GREEN_TEA.get(), RenderType.getTranslucent());
