@@ -7,4 +7,5 @@ assignees: ''
 
 ---
 
-Describe your feature here...
+**Describe your feature here**
+Make sure to keep the idea balanced (not too good nor too unrewarding)
