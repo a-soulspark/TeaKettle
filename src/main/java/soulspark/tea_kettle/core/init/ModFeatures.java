@@ -23,7 +23,6 @@ public class ModFeatures {
 		TEA_BUSH = TEA_BUSH_FEATURE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
 				.withPlacement(Placement.CHANCE.configure(new ChanceConfig(4)))
 				.withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT);
-		
 		Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation("tea_kettle:tea_bush"), ModFeatures.TEA_BUSH);
 	}
 }

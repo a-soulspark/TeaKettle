@@ -2,6 +2,8 @@ package soulspark.tea_kettle.core.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -30,6 +32,7 @@ public class KettleJEIPlugin implements IModPlugin {
 		World world = Minecraft.getInstance().world;
 		if (world != null) {
 			registry.addRecipes(world.getRecipeManager().getRecipesForType(ModRecipeTypes.TEA_STEEPING), TeaSteepingRecipeCategory.UID);
+			registry.addRecipes(world.getRecipeManager().getRecipesForType(ModRecipeTypes.SHEARING), VanillaRecipeCategoryUid.CRAFTING);
 		}
 	}
 	

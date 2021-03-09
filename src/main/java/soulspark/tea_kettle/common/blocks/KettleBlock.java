@@ -76,7 +76,7 @@ public class KettleBlock extends Block {
 	// returns true if the block underneath is in the "hot" tag or is an AbstractFurnaceBlock
 	protected boolean isHot(IWorld world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
-		return state.isIn(KettleTags.HOT) || (state.getBlock() instanceof AbstractFurnaceBlock && state.get(AbstractFurnaceBlock.LIT));
+		return state.isIn(KettleTags.HOT) || ((state.isIn(KettleTags.FURNACES) || state.getBlock() instanceof AbstractFurnaceBlock) && state.get(AbstractFurnaceBlock.LIT));
 	}
 	
 	@Nullable

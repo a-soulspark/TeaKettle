@@ -9,8 +9,10 @@ import net.minecraft.util.ResourceLocation;
 
 public class KettleTags {
 	public static ITag<Block> HOT = BlockTags.makeWrapperTag("tea_kettle:hot");
+	public static ITag<Block> FURNACES = BlockTags.makeWrapperTag("tea_kettle:furnaces");
 	
 	public static void registerTags() {
 		HOT = BlockTags.getCollection().getTagByID(new ResourceLocation("tea_kettle:hot"));
+		FURNACES = BlockTags.getCollection().getTagByID(new ResourceLocation("tea_kettle:furnaces"));
 	}
 }

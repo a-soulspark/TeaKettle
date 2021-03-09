@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.1'
+version = '0.1.1'
 group = 'soulspark.tea_kettle' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'tea_kettle'
 
@@ -94,12 +94,16 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.37'
+    minecraft 'net.minecraftforge:forge:1.16.4-35.1.4'
 
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    //implementation fg.deobf("com.ldtteam:structurize:${structurize_version}")
+    implementation fg.deobf("libs:simplytea-1.16.5:2.3.4")
+    implementation fg.deobf("libs:ironfurnaces-1.16.4:2.5.6")
+    //implementation fg.deobf("libs:Redstopia+1.16.4+ver1")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -111,7 +115,6 @@ dependencies {
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
     // These dependencies get remapped to your current MCP mappings
     // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
 
@@ -146,6 +149,9 @@ repositories {
     /*maven {
         url = 'http://maven.mcmoddev.com'
     }*/
+    flatDir {
+        dirs "libs"
+    }
     maven {
         name = "Progwml6 maven"
         url "http://dvs1.progwml6.com/files/maven"
@@ -154,6 +160,10 @@ repositories {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        name = 'LDTTeam - Modding'
+        url = 'https://ldtteam.jfrog.io/ldtteam/modding/'
     }
 }
 
@@ -165,17 +175,7 @@ publishing {
     }
     repositories {
         maven {
-            url "https://github.com/a-soulspark/Kettle"
-        }
-        maven {
-            // location of the maven that hosts JEI files
-            name = "Progwml6 maven"
-            url = "https://dvs1.progwml6.com/files/maven/"
-        }
-        maven {
-            // location of a maven mirror for JEI files, as a fallback
-            name = "ModMaven"
-            url = "https://modmaven.k-4u.nl"
+            url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
 }

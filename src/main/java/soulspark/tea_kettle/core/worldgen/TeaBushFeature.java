@@ -20,7 +20,7 @@ public class TeaBushFeature extends Feature<NoFeatureConfig> {
 	public boolean generate(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		BlockPos down = pos.down();
 		BlockState soil = worldIn.getBlockState(down);
-		if(soil.canSustainPlant(worldIn, down, Direction.UP, ModBlocks.TEA_BUSH.get()) && worldIn.getBlockState(pos).isAir(worldIn, pos)) {
+		if (soil.canSustainPlant(worldIn, down, Direction.UP, ModBlocks.TEA_BUSH.get()) && worldIn.getBlockState(pos).isAir(worldIn, pos)) {
 			worldIn.setBlockState(pos, ModBlocks.TEA_BUSH.get().getDefaultState(), 3);
 			return true;
 		}
