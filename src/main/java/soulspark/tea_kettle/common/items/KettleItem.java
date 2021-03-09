@@ -1,5 +1,6 @@
 package soulspark.tea_kettle.common.items;
 
+import net.minecraft.block.BlockState;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.TeaKettle;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -14,6 +15,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import soulspark.tea_kettle.core.util.KettleTags;
 
 public class KettleItem extends BlockItem {
 	public KettleItem(KettleBlock block, Properties builder) {
@@ -40,7 +42,9 @@ public class KettleItem extends BlockItem {
 	
 	@Override
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-		if (context.getFace() == Direction.UP && context.getWorld().getBlockState(context.getPos()).getBlock() instanceof AbstractFurnaceBlock)
+		BlockState state = context.getWorld().getBlockState(context.getPos());
+		
+		if (context.getFace() == Direction.UP && (state.isIn(KettleTags.FURNACES) || state.getBlock() instanceof AbstractFurnaceBlock))
 			return onItemUse(context);
 		
 		return super.onItemUseFirst(stack, context);
