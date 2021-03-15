@@ -1,5 +1,5 @@
 {
 	"type": "tea_kettle:tea_steeping",
-	"ingredient": { "item": "tea_kettle:tea_leaf" },
+	"ingredient": { "tag": "tea_kettle:green_tea_leaves" },
 	"result": "tea_kettle:green_tea"
 }

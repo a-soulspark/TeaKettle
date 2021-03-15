@@ -103,14 +103,14 @@ public class CupBlock extends Block {
 					if (cupTileEntity.handler.isEmpty()) {
 						// if the world is remote, skip all of it and just say "success"
 						if (!worldIn.isRemote) {
-							ItemStack blockItem = new ItemStack(asItem());
+							ItemStack blockStack = new ItemStack(asItem());
 							// if the cup is the same as the cup you're holding, increase the stack by 1
 							// if it isn't, try adding the cup to the inventory if there's room for it
-							if (stack.isEmpty() || stack.getItem() == blockItem.getItem()) {
-								if (!player.abilities.isCreativeMode) blockItem.grow(stack.getCount());
-								player.setHeldItem(handIn, blockItem);
+							if (handEmpty || stack.getItem() == blockStack.getItem()) {
+								if (!player.abilities.isCreativeMode) blockStack.grow(stack.getCount());
+								player.setHeldItem(handIn, blockStack);
 							}
-							else if (!player.addItemStackToInventory(blockItem)) return ActionResultType.FAIL;
+							else if (!player.addItemStackToInventory(blockStack)) return ActionResultType.FAIL;
 							// send the update to clients and remove the block
 							((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 							worldIn.removeBlock(pos, false);
@@ -132,28 +132,28 @@ public class CupBlock extends Block {
 				}
 			}
 			else {
-				if (stack.getItem() instanceof KettleItem) {
+				if (stack.getItem() == ModItems.BOILING_KETTLE.get()) {
 					ItemStack ingredient = cupTileEntity.handler.getStack();
-					CompoundNBT kettleTag = stack.getTag();
 					// if the cup has an ingredient and the item used is a kettle with hot water
-					if (!ingredient.isEmpty() && kettleTag != null && kettleTag.getCompound("BlockStateTag").getString("content").equals("hot_water")) {
+					if (!ingredient.isEmpty()) {
 						// tries getting the recipe for the given ingredient
 						if (!tryMakeTea(state, worldIn, pos, cupTileEntity, ingredient)) return ActionResultType.CONSUME;
 						
 						// don't empty the kettle if player is in creative mode
 						if (!player.abilities.isCreativeMode) {
+							CompoundNBT kettleTag = stack.getOrCreateTag();
 							CompoundNBT blockStateTag = kettleTag.getCompound("BlockStateTag");
 							
 							// decrease the fullness of the kettle by one
 							int fullness = blockStateTag.getInt("fullness") - 1;
-							blockStateTag.putInt("fullness", fullness);
+							
 							// if the kettle has no fullness, make it empty
-							if (fullness <= 0) {
-								blockStateTag.putString("content", "empty");
-								kettleTag.getCompound("BlockEntityTag").putInt("BoilingTicks", 0);
+							if (fullness <= 0) stack = new ItemStack(ModItems.EMPTY_KETTLE.get());
+							else {
+								blockStateTag.putInt("fullness", fullness);
+								// finally, update the item's tag
+								stack.setTag(kettleTag);
 							}
-							// finally, update the item's tag
-							stack.setTag(kettleTag);
 							
 							player.setHeldItem(handIn, stack);
 							if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);

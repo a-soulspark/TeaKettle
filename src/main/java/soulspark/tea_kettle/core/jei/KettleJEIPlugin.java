@@ -40,7 +40,7 @@ public class KettleJEIPlugin implements IModPlugin {
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
 		registry.addRecipeCatalyst(new ItemStack(ModItems.CUP.get()), TeaSteepingRecipeCategory.UID);
 		
-		ItemStack kettleStack = new ItemStack(ModItems.KETTLE.get());
+		ItemStack kettleStack = new ItemStack(ModItems.BOILING_KETTLE.get());
 		CompoundNBT tag = new CompoundNBT();
 		CompoundNBT blockStateTag = tag.getCompound("BlockStateTag");
 		blockStateTag.putString("content", "hot_water");

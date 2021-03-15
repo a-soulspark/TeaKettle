@@ -6,11 +6,11 @@
 	],
 	"key": {
 		"#": {
-			"item": "minecraft:iron_ingot"
+			"tag": "forge:ingots/iron"
 		}
 	},
 	"result": {
-		"item": "tea_kettle:kettle",
+		"item": "tea_kettle:empty_kettle",
 		"count": 1
 	}
 }

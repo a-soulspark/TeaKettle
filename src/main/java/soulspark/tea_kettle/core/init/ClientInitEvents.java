@@ -14,7 +14,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientInitEvents {
 	@SubscribeEvent
 	public static void onClientSetupEvent(FMLClientSetupEvent event) {
-		RenderTypeLookup.setRenderLayer(ModBlocks.KETTLE.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModBlocks.EMPTY_KETTLE.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModBlocks.WATER_KETTLE.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModBlocks.BOILING_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.CUP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.TEA_BUSH.get(), RenderType.getCutout());
 		
@@ -25,18 +27,6 @@ public class ClientInitEvents {
 		RenderTypeLookup.setRenderLayer(ModBlocks.BAMBOO_TEA.get(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModBlocks.ROSE_TEA.get(), RenderType.getTranslucent());
 		
-		ItemModelsProperties.registerProperty(ModItems.KETTLE.get(), new ResourceLocation(TeaKettle.MODID, "content"), (stack, world, entity) -> {
-			String content = KettleItem.getContentFromStack(stack);
-			switch (content) {
-				case "hot_water_full": return 1;
-				case "hot_water": return 0.75f;
-				case "water": return 0.5f;
-				default: return 0;
-			}
-		});
-		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntities.CUP.get(), CupTileEntityRenderer::new);
-		
-		//TeaKettle.LOGGER.info("Hello, setting client up for ya.");
 	}
 }

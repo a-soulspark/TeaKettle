@@ -2,6 +2,7 @@ package soulspark.tea_kettle.core.init;
 
 import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.items.CupItem;
+import soulspark.tea_kettle.common.items.EmptyKettleItem;
 import soulspark.tea_kettle.common.items.KettleItem;
 import soulspark.tea_kettle.common.items.TeaItem;
 import net.minecraft.item.*;
@@ -15,8 +16,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TeaKettle.MODID);
 	
-	public static final RegistryObject<KettleItem> KETTLE = ITEMS.register("kettle", () ->
-			new KettleItem(ModBlocks.KETTLE.get(), new Item.Properties().group(ItemGroup.DECORATIONS).maxStackSize(1)));
+	private static final Item.Properties KETTLE_PROPERTIES = new Item.Properties().group(ItemGroup.DECORATIONS).maxStackSize(1);
+	
+	public static final RegistryObject<EmptyKettleItem> EMPTY_KETTLE = ITEMS.register("empty_kettle", () ->
+			new EmptyKettleItem(ModBlocks.EMPTY_KETTLE.get(), KETTLE_PROPERTIES));
+	
+	public static final RegistryObject<KettleItem> WATER_KETTLE = ITEMS.register("water_kettle", () ->
+			new KettleItem(ModBlocks.WATER_KETTLE.get(), KETTLE_PROPERTIES));
+	
+	public static final RegistryObject<KettleItem> BOILING_KETTLE = ITEMS.register("boiling_kettle", () ->
+			new KettleItem(ModBlocks.BOILING_KETTLE.get(), KETTLE_PROPERTIES));
 	
 	public static final RegistryObject<CupItem> CUP = ITEMS.register("cup", () ->
 			new CupItem(ModBlocks.CUP.get(), new Item.Properties().group(ItemGroup.DECORATIONS).maxStackSize(16)));

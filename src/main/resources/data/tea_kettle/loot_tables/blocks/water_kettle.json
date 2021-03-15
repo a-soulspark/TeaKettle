@@ -17,16 +17,9 @@
 									"op": "replace"
 								}
 							]
-						},
-						{
-							"function": "minecraft:copy_state",
-							"block": "tea_kettle:kettle",
-							"properties": [
-								"content"
-							]
 						}
 					],
-					"name": "tea_kettle:kettle"
+					"name": "tea_kettle:water_kettle"
 				}
 			]
 		}

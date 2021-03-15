@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "tea_kettle:item/kettle"
+		"layer0": "tea_kettle:item/empty_kettle"
 	},
 	"display": {
 		"firstperson_righthand": {

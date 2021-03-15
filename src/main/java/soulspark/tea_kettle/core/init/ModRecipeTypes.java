@@ -2,7 +2,6 @@ package soulspark.tea_kettle.core.init;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.ShapelessRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;

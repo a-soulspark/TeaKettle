@@ -1,0 +1,9 @@
+{
+	"values": [
+		"tea_kettle:black_tea_leaf",
+		{
+			"id": "simplytea:black_tea",
+			"required": false
+		}
+	]
+}

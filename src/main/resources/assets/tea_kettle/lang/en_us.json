@@ -1,7 +1,7 @@
 {
-	"block.tea_kettle.kettle": "Kettle",
-	"block.tea_kettle.kettle_water": "Kettle with Water",
-	"block.tea_kettle.kettle_hot_water": "Kettle with Hot Water",
+	"block.tea_kettle.empty_kettle": "Kettle",
+	"block.tea_kettle.water_kettle": "Waterful Kettle",
+	"block.tea_kettle.boiling_kettle": "Boiling Kettle",
 	"block.tea_kettle.cup": "Cup",
 	"block.tea_kettle.green_tea": "Cup of Green Tea",
 	"block.tea_kettle.white_tea": "Cup of White Tea",

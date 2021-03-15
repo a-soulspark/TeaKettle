@@ -1,8 +1,14 @@
 package soulspark.tea_kettle.core;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
+import org.spongepowered.asm.obfuscation.mapping.IMapping;
+import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.core.init.ModEffects;
 import soulspark.tea_kettle.core.init.ModFeatures;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,12 +22,24 @@ import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import soulspark.tea_kettle.core.init.ModItems;
 
 public class CommonEvents {
 	@SubscribeEvent
 	public static void onBiomeLoad(BiomeLoadingEvent event) {
 		if ((event.getName() == null && event.getCategory() == Biome.Category.FOREST) || BiomeDictionary.hasType(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName()), BiomeDictionary.Type.FOREST)) {
 			event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.TEA_BUSH);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onMissingMappings(RegistryEvent.MissingMappings<Item> event) {
+		TeaKettle.LOGGER.info("UNIQUE THINGYYYY {}", event.getName());
+		for (RegistryEvent.MissingMappings.Mapping<Item> item : event.getAllMappings()) {
+			if (item != null && item.key.equals(new ResourceLocation(TeaKettle.MODID, "kettle"))) {
+				TeaKettle.LOGGER.info("kajs {}", event.getName());
+				item.remap(ModItems.EMPTY_KETTLE.get());
+			}
 		}
 	}
 	
