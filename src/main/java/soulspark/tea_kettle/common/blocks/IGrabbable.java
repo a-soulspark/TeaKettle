@@ -9,6 +9,6 @@ public interface IGrabbable {
 	ItemStack getGrabStack(BlockState state, World world, BlockPos pos);
 	
 	default void grab(BlockState state, World world, BlockPos pos) {
-		world.removeBlock(pos, false);
+		if (!world.isRemote) world.removeBlock(pos, false);
 	}
 }

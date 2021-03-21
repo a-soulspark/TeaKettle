@@ -77,10 +77,11 @@ public class KettleBlock extends Block implements IGrabbable {
 				player.setHeldItem(handIn, stack);
 				if (player instanceof ServerPlayerEntity)
 					((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
+				
+				// breaks the kettle block and sends the Kettle item straight to the player's inventory
+				worldIn.removeBlock(pos, false);
 			} else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
 			
-			// breaks the kettle block and sends the Kettle item straight to the player's inventory
-			worldIn.removeBlock(pos, false);
 			return ActionResultType.func_233537_a_(worldIn.isRemote);
 		}
 		

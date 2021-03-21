@@ -36,7 +36,7 @@ public class LegacyKettleTileEntity extends TileEntity implements ITickableTileE
 			else
 				upgradedState = ModBlocks.WATER_KETTLE.get().getDefaultState().with(FilledKettleBlock.LIT, state.get(FilledKettleBlock.LIT)).with(FilledKettleBlock.HOT, content == LegacyKettleBlock.Content.HOT_WATER).with(FilledKettleBlock.FULLNESS, Math.max(1, state.get(LegacyKettleBlock.FULLNESS)));
 			
-			world.setBlockState(pos, upgradedState.with(KettleBlock.FACING, state.get(LegacyKettleBlock.FACING)), 2);
+			world.setBlockState(pos, upgradedState.with(KettleBlock.FACING, state.get(LegacyKettleBlock.FACING)));
 			
 		}
 	}

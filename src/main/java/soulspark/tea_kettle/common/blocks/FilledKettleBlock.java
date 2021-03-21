@@ -2,7 +2,6 @@ package soulspark.tea_kettle.common.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,11 +54,6 @@ public class FilledKettleBlock extends KettleBlock {
 	// makes the block face to the right of the placing direction, and updates the lit state to match the block underneath
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		return super.getStateForPlacement(context).with(LIT, isHot(context.getWorld(), context.getPos().down()));
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 	}
 	
 	@Override

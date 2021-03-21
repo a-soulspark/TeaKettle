@@ -187,13 +187,11 @@ public class CupBlock extends Block implements IGrabbable {
 	@Override
 	public void grab(BlockState state, World world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (!(tileEntity instanceof CupTileEntity)) return;
+		if (!(tileEntity instanceof CupTileEntity) || world.isRemote) return;
 		CupTileEntity cupTileEntity = (CupTileEntity)tileEntity;
 		
-		if (!world.isRemote) {
-			if (cupTileEntity.handler.isEmpty()) world.removeBlock(pos, false);
-			else cupTileEntity.handler.setStack(ItemStack.EMPTY);
-		}
+		if (cupTileEntity.handler.isEmpty()) world.removeBlock(pos, false);
+		else cupTileEntity.handler.setStack(ItemStack.EMPTY);
 	}
 	
 	private boolean tryMakeTea(BlockState state, World worldIn, BlockPos pos, CupTileEntity cupTileEntity, ItemStack ingredient) {
