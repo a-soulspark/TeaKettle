@@ -1,0 +1,62 @@
+{
+	"type": "minecraft:block",
+	"pools": [
+		{
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"conditions": [
+						{
+							"condition": "minecraft:block_state_property",
+							"block": "tea_kettle:milk_kettle",
+							"properties": {
+								"hot": "false"
+							}
+						}
+					],
+					"functions": [
+						{
+							"function": "minecraft:copy_nbt",
+							"source": "block_entity",
+							"ops": [
+								{
+									"source": "BoilingTicks",
+									"target": "BlockEntityTag.BoilingTicks",
+									"op": "replace"
+								}
+							]
+						}
+					],
+					"name": "tea_kettle:milk_kettle"
+				},
+				{
+					"type": "minecraft:item",
+					"conditions": [
+						{
+							"condition": "minecraft:block_state_property",
+							"block": "tea_kettle:milk_kettle",
+							"properties": {
+								"hot": "true"
+							}
+						}
+					],
+					"functions": [
+						{
+							"function": "minecraft:copy_nbt",
+							"source": "block_entity",
+							"ops": [
+								{
+									"source": "BoilingTicks",
+									"target": "BlockEntityTag.BoilingTicks",
+									"op": "replace"
+								}
+							]
+						}
+					],
+					"name": "tea_kettle:frothing_kettle"
+				}
+			]
+		}
+	]
+}

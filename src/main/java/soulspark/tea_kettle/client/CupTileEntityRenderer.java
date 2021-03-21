@@ -1,7 +1,6 @@
-package soulspark.tea_kettle.client.tile_entity.render;
+package soulspark.tea_kettle.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import soulspark.tea_kettle.common.tile_entities.CupTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
+import soulspark.tea_kettle.common.tile_entities.CupTileEntity;
 
 public class CupTileEntityRenderer extends TileEntityRenderer<CupTileEntity> {
 	public CupTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {

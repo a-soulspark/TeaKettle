@@ -1,6 +1,6 @@
 {
 	"parent": "tea_kettle:item/kettle",
 	"textures": {
-		"layer0": "tea_kettle:item/boiling_kettle_low"
+		"layer0": "tea_kettle:item/milk_kettle"
 	}
 }

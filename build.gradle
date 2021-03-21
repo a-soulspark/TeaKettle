@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.1.1'
+version = '0.2.0'
 group = 'soulspark.tea_kettle' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'tea_kettle'
 
@@ -102,7 +102,7 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     //implementation fg.deobf("com.ldtteam:structurize:${structurize_version}")
     implementation fg.deobf("libs:simplytea-1.16.5:2.3.4")
-    implementation fg.deobf("libs:ironfurnaces-1.16.4:2.5.6")
+    //implementation fg.deobf("libs:ironfurnaces-1.16.4:2.5.6")
     //implementation fg.deobf("libs:Redstopia+1.16.4+ver1")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..

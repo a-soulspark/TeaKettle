@@ -1,0 +1,5 @@
+{
+	"type": "tea_kettle:tea_mixing",
+	"ingredient": { "item": "tea_kettle:white_tea" },
+	"result": "tea_kettle:white_latte"
+}

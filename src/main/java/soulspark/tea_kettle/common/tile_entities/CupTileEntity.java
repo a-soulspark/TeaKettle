@@ -1,12 +1,12 @@
 package soulspark.tea_kettle.common.tile_entities;
 
-import soulspark.tea_kettle.core.init.ModTileEntities;
-import soulspark.tea_kettle.core.util.CupItemHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import soulspark.tea_kettle.core.init.ModTileEntities;
+import soulspark.tea_kettle.core.util.CupItemHandler;
 
 public class CupTileEntity extends TileEntity {
 	public CupItemHandler handler;

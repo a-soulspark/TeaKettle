@@ -1,6 +1,5 @@
 package soulspark.tea_kettle.core.worldgen;
 
-import soulspark.tea_kettle.core.init.ModBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -8,6 +7,7 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import soulspark.tea_kettle.core.init.ModBlocks;
 
 import java.util.Random;
 

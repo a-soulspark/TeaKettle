@@ -59,7 +59,8 @@ public class TeaSteepingRecipeCategory implements IRecipeCategory<TeaSteepingRec
 			//TeaKettle.LOGGER.info("yup, this is an ingredient! (this: {})", (Object) ingredient.getMatchingStacks());
 		}
 		
-		iIngredients.setInputs(VanillaTypes.ITEM, inputs.build());
+		iIngredients.setInputIngredients(teaSteepingRecipe.getIngredients());
+		//iIngredients.setInputs(VanillaTypes.ITEM, inputs.build());
 		iIngredients.setOutput(VanillaTypes.ITEM, teaSteepingRecipe.getRecipeOutput());
 	}
 	

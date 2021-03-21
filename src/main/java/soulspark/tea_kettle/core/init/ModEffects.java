@@ -1,7 +1,5 @@
 package soulspark.tea_kettle.core.init;
 
-import soulspark.tea_kettle.TeaKettle;
-import soulspark.tea_kettle.common.effects.ModEffect;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.potion.Effect;
@@ -9,6 +7,8 @@ import net.minecraft.potion.EffectType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import soulspark.tea_kettle.TeaKettle;
+import soulspark.tea_kettle.common.effects.ModEffect;
 
 public class ModEffects {
 	public static DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, TeaKettle.MODID);

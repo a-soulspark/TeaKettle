@@ -3,14 +3,16 @@ package soulspark.tea_kettle.common.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.state.*;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
-import soulspark.tea_kettle.core.init.ModBlocks;
+import net.minecraft.world.IBlockReader;
+import soulspark.tea_kettle.common.tile_entities.LegacyKettleTileEntity;
 
-import java.util.Random;
+import javax.annotation.Nullable;
 
 public class LegacyKettleBlock extends Block {
 	public enum Content implements IStringSerializable {
@@ -28,12 +30,22 @@ public class LegacyKettleBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	public static final EnumProperty<Content> CONTENT = EnumProperty.create("content", Content.class, Content.EMPTY, Content.WATER, Content.HOT_WATER);
 	public static final IntegerProperty FULLNESS = IntegerProperty.create("fullness", 0, 2);
-	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	
 	public LegacyKettleBlock(Properties properties) {
 		super(properties);
 	}
 	
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return new LegacyKettleTileEntity();
+	}
+	
+	/*
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 		BlockState upgradedState;
@@ -46,15 +58,16 @@ public class LegacyKettleBlock extends Block {
 				upgradedState = ModBlocks.WATER_KETTLE.get().getDefaultState();
 				break;
 			default:
-				upgradedState = ModBlocks.BOILING_KETTLE.get().getDefaultState().with(BoilingKettleBlock.FULLNESS, state.get(LegacyKettleBlock.FULLNESS));
+				upgradedState = ModBlocks.WATER_KETTLE.get().getDefaultState().with(FilledKettleBlock.HOT, true);
 				break;
 		}
 		
 		worldIn.setBlockState(pos, upgradedState.with(KettleBlock.FACING, state.get(LegacyKettleBlock.FACING)));
 	}
+	*/
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(FACING, CONTENT, FULLNESS, LIT);
+		builder.add(FACING, CONTENT, FULLNESS, FilledKettleBlock.LIT);
 	}
 }

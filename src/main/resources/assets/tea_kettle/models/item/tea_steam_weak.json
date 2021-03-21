@@ -1,0 +1,6 @@
+{
+	"parent": "tea_kettle:item/tea",
+	"textures": {
+		"layer1": "tea_kettle:item/tea_steam_weak"
+	}
+}

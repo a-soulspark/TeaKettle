@@ -1,6 +1,9 @@
 package soulspark.tea_kettle.common.particles;
 
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.RisingParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,6 +17,14 @@ public class SteamParticle extends RisingParticle {
 		super(world, x, y, z, 0.1F, 0.1F, 0.1F, motionX, motionY, motionZ, scale, spriteWithAge, 1, 8, 0.004D, true);
 		float f = world.rand.nextFloat() * 0.2f + 0.8f;
 		particleRed = particleGreen = particleBlue = f;
+	}
+	
+	public void tick() {
+		super.tick();
+		if (this.age < this.maxAge) {
+			this.motionX *= 0.85F;
+			this.motionZ *= 0.85F;
+		}
 	}
 	
 	public static class Factory implements IParticleFactory<BasicParticleType> {

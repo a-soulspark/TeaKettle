@@ -2,7 +2,7 @@
 	"values": [
 		"tea_kettle:tea_leaf",
 		{
-			"id": "simplytea:tea_leaf",
+			"id": "simplytea:teabag_green",
 			"required": false
 		}
 	]

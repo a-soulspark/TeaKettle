@@ -31,6 +31,4 @@ logoFile="icon.png" #optional
 # A text field displayed in the mod UI
 authors="a_soulspark" #optional
 # The description text for the mod (multi line!) (#mandatory)
-description='''
-Have a tea mod to calm your nerves.
-'''
+description='''Have a tea mod to calm your nerves.'''

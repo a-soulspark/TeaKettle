@@ -1,7 +1,9 @@
 {
 	"block.tea_kettle.empty_kettle": "Kettle",
 	"block.tea_kettle.water_kettle": "Waterful Kettle",
-	"block.tea_kettle.boiling_kettle": "Boiling Kettle",
+	"block.tea_kettle.water_kettle_hot": "Boiling Kettle",
+	"block.tea_kettle.milk_kettle": "Milkful Kettle",
+	"block.tea_kettle.milk_kettle_hot": "Frothing Kettle",
 	"block.tea_kettle.cup": "Cup",
 	"block.tea_kettle.green_tea": "Cup of Green Tea",
 	"block.tea_kettle.white_tea": "Cup of White Tea",
@@ -9,6 +11,10 @@
 	"block.tea_kettle.black_tea": "Cup of Black Tea",
 	"block.tea_kettle.bamboo_tea": "Cup of Bamboo Tea",
 	"block.tea_kettle.rose_tea": "Cup of Rose Tea",
+	"block.tea_kettle.green_latte": "Cup of Green Latte",
+	"block.tea_kettle.white_latte": "Cup of White Latte",
+	"block.tea_kettle.oolong_latte": "Cup of Oolong Latte",
+	"block.tea_kettle.black_latte": "Cup of Black Latte",
 	"block.tea_kettle.tea_leaves": "Tea Leaves",
 	"item.tea_kettle.rose_petal": "Rose Petal",
 	"item.tea_kettle.bamboo_leaf": "Bamboo Leaf",
@@ -16,8 +22,12 @@
 	"item.tea_kettle.white_tea_leaf": "White Tea Leaf",
 	"item.tea_kettle.oolong_tea_leaf": "Oolong Tea Leaf",
 	"item.tea_kettle.black_tea_leaf": "Black Tea Leaf",
+	"item.tea_kettle.half_honey_bottle": "Half-Empty Honey Bottle",
 	"block.minecraft.bed.caffeine": "You couldn't fall asleep; too caffeinated",
 	"effect.tea_kettle.caffeine": "Caffeine",
 	"effect.tea_kettle.zen": "Zen",
-	"tea_kettle.jei.tea_steeping": "Tea Steeping"
+	"tea_kettle.tea_sweetened_weak": "Slighty Sweetened",
+	"tea_kettle.tea_sweetened_strong": "Well Sweetened",
+	"tea_kettle.jei.tea_steeping": "Tea Steeping",
+	"tea_kettle.jei.tea_mixing": "Tea Mixing"
 }

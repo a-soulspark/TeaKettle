@@ -1,0 +1,18 @@
+{
+	"parent": "item/generated",
+	"loader": "tea_kettle:tea",
+	"textures": {
+		"base": "tea_kettle:item/cup",
+		"layer1": "tea_kettle:item/tea_steam"
+	},
+	"overrides": [
+		{
+			"predicate": { "tea_kettle:sweetness": 1 },
+			"model": "tea_kettle:item/tea_steam_strong"
+		},
+		{
+			"predicate": { "tea_kettle:sweetness": 0.5 },
+			"model": "tea_kettle:item/tea_steam_weak"
+		}
+	]
+}

@@ -1,10 +1,5 @@
 package soulspark.tea_kettle.common.tile_entities;
 
-import soulspark.tea_kettle.common.blocks.WaterKettleBlock;
-import soulspark.tea_kettle.common.blocks.KettleBlock;
-import soulspark.tea_kettle.core.init.ModBlocks;
-import soulspark.tea_kettle.core.init.ModParticles;
-import soulspark.tea_kettle.core.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -14,16 +9,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import soulspark.tea_kettle.common.blocks.FilledKettleBlock;
+import soulspark.tea_kettle.common.blocks.KettleBlock;
+import soulspark.tea_kettle.core.init.ModParticles;
+import soulspark.tea_kettle.core.init.ModTileEntities;
 
 import javax.annotation.Nullable;
 
-public class WaterKettleTileEntity extends TileEntity implements ITickableTileEntity {
+public class KettleTileEntity extends TileEntity implements ITickableTileEntity {
 	public static final int TICKS_TO_BOIL = 150;
 	
 	public int boilingTicks = 0;
 	
-	public WaterKettleTileEntity() {
-		super(ModTileEntities.WATER_KETTLE.get());
+	public KettleTileEntity() {
+		super(ModTileEntities.FILLED_KETTLE.get());
 	}
 	
 	@Override
@@ -31,15 +30,17 @@ public class WaterKettleTileEntity extends TileEntity implements ITickableTileEn
 		if (world == null) return;
 		
 		BlockState state = getBlockState();
-		boolean lit = state.get(WaterKettleBlock.LIT);
+		boolean lit = state.get(FilledKettleBlock.LIT);
+		boolean hot = state.get(FilledKettleBlock.HOT);
 		
 		if (world.isRemote) {
+			float chance = hot ? 1 : (float)boilingTicks / (TICKS_TO_BOIL * 4);
 			// chance increases with boiling ticks
-			if (Math.random() < boilingTicks / (TICKS_TO_BOIL * 2f) - 0.2f) {
+			if (Math.random() <= chance) {
 				BlockPos offset = pos.offset(state.get(KettleBlock.FACING).rotateYCCW()).subtract(pos);
-				world.addParticle(ModParticles.STEAM.get(), pos.getX() + 0.5f + offset.getX() * 0.45f, pos.getY() + 0.35f, pos.getZ() + 0.5f + offset.getZ() * 0.45f, 0.0D, 0.05D * boilingTicks / TICKS_TO_BOIL, 0.0D);
+				world.addParticle(ModParticles.STEAM.get(), pos.getX() + 0.5f + offset.getX() * 0.45f, pos.getY() + 0.35f, pos.getZ() + 0.5f + offset.getZ() * 0.45f, offset.getX() * 0.03 * chance, 0.05D * chance, offset.getZ() * 0.03 * chance);
 			}
-		} else {
+		} else if (!hot) {
 			if (lit) {
 				// increases boiling ticks until it reaches boiling point and then turns water into hot water
 				boilingTicks += 1;
@@ -47,7 +48,7 @@ public class WaterKettleTileEntity extends TileEntity implements ITickableTileEn
 					BlockState oldState = getBlockState();
 					
 					world.playSound(null, pos, SoundEvents.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, SoundCategory.BLOCKS, 1f, 1.2f);
-					world.setBlockState(pos, ModBlocks.BOILING_KETTLE.get().getDefaultState().with(KettleBlock.FACING, state.get(KettleBlock.FACING)));
+					world.setBlockState(pos, state.with(FilledKettleBlock.HOT, true));
 					notifyChanged(oldState); // makes sure to point out the state changed too
 				}
 				else notifyChanged();
@@ -61,12 +62,6 @@ public class WaterKettleTileEntity extends TileEntity implements ITickableTileEn
 				}
 			}
 		}
-	}
-	
-	// called by KettleBlock when emptying it with a glass bottle; prevents ticks to persist when the kettle is empty
-	public void resetBoilingTicks() {
-		boilingTicks = 0;
-		notifyChanged();
 	}
 	
 	@Override

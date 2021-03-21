@@ -1,14 +1,13 @@
 package soulspark.tea_kettle.common.blocks;
 
-import soulspark.tea_kettle.common.tile_entities.WaterKettleTileEntity;
-import soulspark.tea_kettle.core.init.ModItems;
-import soulspark.tea_kettle.core.util.KettleTags;
 import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.state.*;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -18,8 +17,10 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import soulspark.tea_kettle.core.init.ModItems;
+import soulspark.tea_kettle.core.util.TeaKettleTags;
 
-public class KettleBlock extends Block {
+public class KettleBlock extends Block implements IGrabbable {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(4, 0, 4, 12, 6, 12);
 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	
@@ -43,7 +44,7 @@ public class KettleBlock extends Block {
 	// returns true if the block underneath is in the "hot" tag or is an AbstractFurnaceBlock
 	protected boolean isHot(IWorld world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
-		return state.isIn(KettleTags.HOT) || ((state.isIn(KettleTags.FURNACES) || state.getBlock() instanceof AbstractFurnaceBlock) && state.get(AbstractFurnaceBlock.LIT));
+		return state.isIn(TeaKettleTags.HOT) || ((state.isIn(TeaKettleTags.FURNACES) || state.getBlock() instanceof AbstractFurnaceBlock) && state.get(AbstractFurnaceBlock.LIT));
 	}
 	
 	@Override
@@ -71,9 +72,12 @@ public class KettleBlock extends Block {
 		
 		// if you right-clicked the kettle with an empty hand... [must be mainhand, the offhand is inconsistent)
 		if (itemStack.isEmpty() && handIn == Hand.MAIN_HAND) {
-			// spawns in a new KettleItem stack and gives it the BlockEntityTag corresponding to this block's TileEntity
-			ItemStack stack = getPickUpItem(state, worldIn, pos);
-			player.setHeldItem(handIn, stack);
+			if (!worldIn.isRemote) {// spawns in a new KettleItem stack and gives it the BlockEntityTag corresponding to this block's TileEntity
+				ItemStack stack = getGrabStack(state, worldIn, pos);
+				player.setHeldItem(handIn, stack);
+				if (player instanceof ServerPlayerEntity)
+					((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
+			} else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
 			
 			// breaks the kettle block and sends the Kettle item straight to the player's inventory
 			worldIn.removeBlock(pos, false);
@@ -83,7 +87,8 @@ public class KettleBlock extends Block {
 		return ActionResultType.PASS;
 	}
 	
-	protected ItemStack getPickUpItem(BlockState state, World worldIn, BlockPos pos) {
+	@Override
+	public ItemStack getGrabStack(BlockState state, World worldIn, BlockPos pos) {
 		return new ItemStack(ModItems.EMPTY_KETTLE.get());
 	}
 	

@@ -1,6 +1,17 @@
 {
 	"parent": "tea_kettle:item/kettle",
 	"textures": {
-		"layer0": "tea_kettle:item/boiling_kettle"
-	}
+		"layer0": "tea_kettle:item/boiling_kettle",
+		"layer1": "tea_kettle:item/kettle_steam_last"
+	},
+	"overrides": [
+		{
+			"predicate": { "tea_kettle:fullness": 0.3 },
+			"model": "tea_kettle:item/boiling_kettle_partial"
+		},
+		{
+			"predicate": { "tea_kettle:fullness": 1 },
+			"model": "tea_kettle:item/boiling_kettle_full"
+		}
+	]
 }

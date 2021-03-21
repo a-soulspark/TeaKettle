@@ -1,10 +1,5 @@
 package soulspark.tea_kettle;
 
-import soulspark.tea_kettle.core.ClientEvents;
-import soulspark.tea_kettle.core.CommonEvents;
-import soulspark.tea_kettle.core.init.RegistryHandler;
-import soulspark.tea_kettle.core.init.ClientInitEvents;
-import soulspark.tea_kettle.core.init.CommonInitEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,6 +8,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import soulspark.tea_kettle.core.ClientEvents;
+import soulspark.tea_kettle.core.CommonEvents;
+import soulspark.tea_kettle.core.init.ClientInitEvents;
+import soulspark.tea_kettle.core.init.CommonInitEvents;
+import soulspark.tea_kettle.core.init.RegistryHandler;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TeaKettle.MODID)

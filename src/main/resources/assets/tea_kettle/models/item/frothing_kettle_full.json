@@ -1,0 +1,7 @@
+{
+	"parent": "tea_kettle:item/kettle",
+	"textures": {
+		"layer0": "tea_kettle:item/frothing_kettle",
+		"layer1": "tea_kettle:item/kettle_steam_full"
+	}
+}

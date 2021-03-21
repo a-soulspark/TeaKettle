@@ -1,28 +1,33 @@
 package soulspark.tea_kettle.core;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
-import org.spongepowered.asm.obfuscation.mapping.IMapping;
-import soulspark.tea_kettle.TeaKettle;
-import soulspark.tea_kettle.core.init.ModEffects;
-import soulspark.tea_kettle.core.init.ModFeatures;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.RegistryKey;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import soulspark.tea_kettle.core.init.ModItems;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
+import soulspark.tea_kettle.common.blocks.IGrabbable;
+import soulspark.tea_kettle.common.items.TeaItem;
+import soulspark.tea_kettle.core.init.ModEffects;
+import soulspark.tea_kettle.core.init.ModFeatures;
 
 public class CommonEvents {
 	@SubscribeEvent
@@ -33,13 +38,50 @@ public class CommonEvents {
 	}
 	
 	@SubscribeEvent
-	public static void onMissingMappings(RegistryEvent.MissingMappings<Item> event) {
-		TeaKettle.LOGGER.info("UNIQUE THINGYYYY {}", event.getName());
-		for (RegistryEvent.MissingMappings.Mapping<Item> item : event.getAllMappings()) {
-			if (item != null && item.key.equals(new ResourceLocation(TeaKettle.MODID, "kettle"))) {
-				TeaKettle.LOGGER.info("kajs {}", event.getName());
-				item.remap(ModItems.EMPTY_KETTLE.get());
-			}
+	public static void onPotionApplicable(PotionEvent.PotionApplicableEvent event) {
+		if (ModList.get().isLoaded("simplytea")) excludeCaffeineEffects(event);
+		
+		if (TeaItem.sweetnessFactor != 1) {
+			event.setResult(Event.Result.DENY);
+			
+			EffectInstance oldEffect = event.getPotionEffect();
+			EffectInstance newEffect = new EffectInstance(oldEffect.getPotion(), (int)(oldEffect.getDuration() * TeaItem.sweetnessFactor), oldEffect.getAmplifier(), oldEffect.isAmbient(), oldEffect.doesShowParticles());
+			TeaItem.sweetnessFactor = 1;
+			event.getEntityLiving().addPotionEffect(newEffect);
+		}
+	}
+	
+	private static void excludeCaffeineEffects(PotionEvent.PotionApplicableEvent event) {
+		Effect caffeinated = ForgeRegistries.POTIONS.getValue(new ResourceLocation("simplytea:caffeinated"));
+		if (caffeinated != null) {
+			if (event.getPotionEffect().getPotion() == caffeinated)
+				event.getEntityLiving().removePotionEffect(ModEffects.CAFFEINE.get());
+			else if (event.getPotionEffect().getPotion() == ModEffects.CAFFEINE.get())
+				event.getEntityLiving().removePotionEffect(caffeinated);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event) {
+		PlayerEntity player = event.getPlayer();
+		World world = event.getWorld();
+		BlockState state = world.getBlockState(event.getPos());
+		
+		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable) {
+			ItemStack stack = event.getItemStack();
+			IGrabbable grabbable = (IGrabbable) state.getBlock();
+			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), event.getPos());
+			
+			if (stack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
+			else if (stack.isItemEqual(grabStack) && stack.getCount() < stack.getMaxStackSize()) stack.grow(1);
+			else if (!player.inventory.addItemStackToInventory(grabStack)) return;
+			
+			if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
+			else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
+			grabbable.grab(state, event.getWorld(), event.getPos());
+			
+			event.setCanceled(true);
+			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
 		}
 	}
 	
@@ -48,7 +90,7 @@ public class CommonEvents {
 		LivingEntity entity = event.getEntityLiving();
 		PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
 		
-		if (!entity.isPotionActive(ModEffects.ZEN.get()) && entity.isPotionActive(ModEffects.CAFFEINE.get()) && (player == null || player.getSleepTimer() > 60)) {
+		if (!entity.isPotionActive(ModEffects.ZEN.get()) && entity.isPotionActive(ModEffects.CAFFEINE.get()) && (player == null || player.getSleepTimer() > 50)) {
 			event.setResult(Event.Result.DENY);
 			if (player != null) player.sendStatusMessage(new TranslationTextComponent("block.minecraft.bed.caffeine"), true);
 		}
@@ -63,48 +105,7 @@ public class CommonEvents {
 	}
 	
 	@SubscribeEvent
-	public static void onWakeUpEvent(PlayerWakeUpEvent event) {
-		if (event.getPlayer().isPotionActive(ModEffects.ZEN.get())) event.getPlayer().removePotionEffect(ModEffects.ZEN.get());
+	public static void onWakeUpEvent(SleepFinishedTimeEvent event) {
+		for (PlayerEntity player : event.getWorld().getPlayers()) player.removePotionEffect(ModEffects.ZEN.get());
 	}
-	
-	/*
-	static ActionResultType trySleep(BlockState state, BlockPos pos, World worldIn, PlayerEntity player) {
-		if (state.get(BedBlock.PART) != BedPart.HEAD) {
-			pos = pos.offset(state.get(BedBlock.HORIZONTAL_FACING));
-			state = worldIn.getBlockState(pos);
-			if (!state.isIn(state.getBlock())) {
-				return ActionResultType.CONSUME;
-			}
-		}
-		
-		if (!BedBlock.doesBedWork(worldIn)) {
-			worldIn.removeBlock(pos, false);
-			BlockPos blockpos = pos.offset(state.get(BedBlock.HORIZONTAL_FACING).getOpposite());
-			if (worldIn.getBlockState(blockpos).isIn(state.getBlock())) {
-				worldIn.removeBlock(blockpos, false);
-			}
-			
-			worldIn.createExplosion(null, DamageSource.func_233546_a_(), null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 5.0F, true, Explosion.Mode.DESTROY);
-			return ActionResultType.SUCCESS;
-		} else if (state.get(BedBlock.OCCUPIED)) {
-			if (!tryWakeUpVillager(worldIn, pos)) {
-				player.sendStatusMessage(new TranslationTextComponent("block.minecraft.bed.occupied"), true);
-			}
-			
-			return ActionResultType.SUCCESS;
-		} else {
-			player.trySleep(pos);
-			return ActionResultType.SUCCESS;
-		}
-	}
-	
-	static boolean tryWakeUpVillager(World world, BlockPos pos) {
-		List<VillagerEntity> list = world.getEntitiesWithinAABB(VillagerEntity.class, new AxisAlignedBB(pos), LivingEntity::isSleeping);
-		if (list.isEmpty()) return false;
-		else {
-			list.get(0).wakeUp();
-			return true;
-		}
-	}
-	 */
 }

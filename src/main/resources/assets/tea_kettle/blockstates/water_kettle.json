@@ -1,18 +1,18 @@
 {
 	"variants": {
 		"facing=north": {
-			"model": "tea_kettle:block/kettle_filled",
+			"model": "tea_kettle:block/water_kettle",
 			"y": 180
 		},
 		"facing=west": {
-			"model": "tea_kettle:block/kettle_filled",
+			"model": "tea_kettle:block/water_kettle",
 			"y": 90
 		},
 		"facing=south": {
-			"model": "tea_kettle:block/kettle_filled"
+			"model": "tea_kettle:block/water_kettle"
 		},
 		"facing=east": {
-			"model": "tea_kettle:block/kettle_filled",
+			"model": "tea_kettle:block/water_kettle",
 			"y": 270
 		}
 	}

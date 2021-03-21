@@ -1,7 +1,5 @@
 package soulspark.tea_kettle.core.init;
 
-import soulspark.tea_kettle.TeaKettle;
-import soulspark.tea_kettle.core.worldgen.TeaBushFeature;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
@@ -11,6 +9,8 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import soulspark.tea_kettle.TeaKettle;
+import soulspark.tea_kettle.core.worldgen.TeaBushFeature;
 
 public class ModFeatures {
 	public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, TeaKettle.MODID);

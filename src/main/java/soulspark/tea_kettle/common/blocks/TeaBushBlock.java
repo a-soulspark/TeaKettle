@@ -1,7 +1,9 @@
 package soulspark.tea_kettle.common.blocks;
 
-import soulspark.tea_kettle.core.init.ModItems;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BushBlock;
+import net.minecraft.block.IGrowable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -19,6 +21,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import soulspark.tea_kettle.core.init.ModItems;
 
 import java.util.Random;
 

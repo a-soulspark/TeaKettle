@@ -1,0 +1,7 @@
+{
+	"parent": "item/generated",
+	"loader": "tea_kettle:tea",
+	"textures": {
+		"base": "tea_kettle:item/white_latte"
+	}
+}

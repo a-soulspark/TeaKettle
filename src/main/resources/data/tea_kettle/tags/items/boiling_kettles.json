@@ -1,0 +1,9 @@
+{
+	"values": [
+		"tea_kettle:boiling_kettle",
+		{
+			"id": "simplytea:teapot_hot",
+			"required": false
+		}
+	]
+}
