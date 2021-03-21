@@ -70,12 +70,14 @@ public class CommonEvents {
 		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable) {
 			ItemStack stack = event.getItemStack();
 			IGrabbable grabbable = (IGrabbable) state.getBlock();
-			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), event.getPos());
+			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), event.getPos()).copy();
 			
-			if (stack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
-			else if (stack.isItemEqual(grabStack) && stack.getCount() < stack.getMaxStackSize()) stack.grow(1);
-			else if (!player.inventory.addItemStackToInventory(grabStack)) return;
-			
+			if (!world.isRemote) {
+				if (stack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
+				else if (stack.isItemEqual(grabStack) && stack.getCount() < stack.getMaxStackSize()) stack.grow(1);
+				else if (!player.inventory.addItemStackToInventory(grabStack)) return;
+			}
+
 			if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 			else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
 			grabbable.grab(state, event.getWorld(), event.getPos());

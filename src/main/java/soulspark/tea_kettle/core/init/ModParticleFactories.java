@@ -1,6 +1,8 @@
 package soulspark.tea_kettle.core.init;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -12,6 +14,7 @@ import soulspark.tea_kettle.common.particles.TeaSteamParticle;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = TeaKettle.MODID)
 public class ModParticleFactories {
 	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
 	public static void registerFactories(ParticleFactoryRegisterEvent event) {
 		Minecraft.getInstance().particles.registerFactory(ModParticles.STEAM.get(), SteamParticle.Factory::new);
 		Minecraft.getInstance().particles.registerFactory(ModParticles.TEA_STEAM.get(), (sprite) -> new TeaSteamParticle.Factory(sprite, 0.7f, 0.7f, 0.7f, 0.5f));
