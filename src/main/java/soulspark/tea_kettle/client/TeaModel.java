@@ -20,7 +20,7 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.VanillaResourceType;
 import soulspark.tea_kettle.TeaKettle;
-import soulspark.tea_kettle.core.init.ClientInitEvents;
+import soulspark.tea_kettle.core.util.TeaKettleUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -46,7 +46,6 @@ public class TeaModel implements IModelGeometry<TeaModel> {
 		RenderMaterial steamTexture = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, steamLocation);
 		RenderMaterial baseTexture = new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, baseLocation);
 		
-		TeaKettle.LOGGER.info("Base tex: {}, mode loc: {}, base loc: {}, steam loc: {}", baseTexture.getTextureLocation(), modelLocation, baseLocation, baseTexture);
 		ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> transformMap = PerspectiveMapWrapper.getTransforms(new ModelTransformComposition(owner.getCombinedTransform(), modelTransform));
 		
 		TransformationMatrix transform = modelTransform.getRotation();
@@ -104,7 +103,7 @@ public class TeaModel implements IModelGeometry<TeaModel> {
 		@Nullable
 		@Override
 		public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity livingEntity) {
-			float sweetness = ClientInitEvents.getSweetness(stack);
+			float sweetness = TeaKettleUtils.getSweetness(stack);
 			
 			if (sweetness == 0) return model;
 			else if (sweetness <= 0.5f) {

@@ -1,5 +1,5 @@
 {
 	"type": "tea_kettle:tea_steeping",
-	"ingredient": { "tag": "tea_kettle:black_tea_leaves" },
+	"ingredients": [{ "item": "tea_kettle:black_tea_leaf" }],
 	"result": "tea_kettle:black_tea"
 }

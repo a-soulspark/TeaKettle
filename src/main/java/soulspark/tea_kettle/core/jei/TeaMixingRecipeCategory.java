@@ -24,7 +24,7 @@ public class TeaMixingRecipeCategory implements IRecipeCategory<TeaMixingRecipe>
 
 	public TeaMixingRecipeCategory(IGuiHelper helper) {
 		background = helper.createDrawable(new ResourceLocation("tea_kettle:textures/gui/jei_tea_mixing.png"), 0, 0, 96 ,44);
-		icon = helper.createDrawableIngredient(new ItemStack(ModItems.FROTHING_KETTLE.get()));
+		icon = helper.createDrawableIngredient(new ItemStack(ModItems.BLACK_LATTE.get()));
 		title = I18n.format("tea_kettle.jei.tea_mixing");
 	}
 	

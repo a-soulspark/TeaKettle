@@ -1,5 +1,5 @@
 {
 	"type": "tea_kettle:tea_steeping",
-	"ingredient": { "item": "tea_kettle:bamboo_leaf" },
+	"ingredients": [{ "item": "tea_kettle:bamboo_leaf" }],
 	"result": "tea_kettle:bamboo_tea"
 }

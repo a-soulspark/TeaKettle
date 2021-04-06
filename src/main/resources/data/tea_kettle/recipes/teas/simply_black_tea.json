@@ -1,0 +1,5 @@
+{
+	"type": "tea_kettle:tea_steeping",
+	"ingredients": [{ "item": "simplytea:teabag_black" }],
+	"result": "simplytea:cup_tea_black"
+}

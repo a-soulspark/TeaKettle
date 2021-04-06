@@ -25,8 +25,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import soulspark.tea_kettle.common.items.TeaItem;
 import soulspark.tea_kettle.common.recipes.TeaMixingRecipe;
+import soulspark.tea_kettle.core.init.ModBlocks;
 import soulspark.tea_kettle.core.init.ModItems;
 import soulspark.tea_kettle.core.init.ModParticles;
 import soulspark.tea_kettle.core.init.ModRecipeTypes;
@@ -158,6 +158,7 @@ public class TeaBlock extends Block implements IGrabbable {
 			TeaMixingRecipe recipe = optional.get();
 			// gets the output item type of the recipe
 			Item item = recipe.getRecipeOutput().getItem();
+			if (ModBlocks.TEA_ITEM_TO_BLOCK.containsKey(item.getRegistryName())) item = ModBlocks.TEA_ITEM_TO_BLOCK.get(item.getRegistryName());
 			// if the item is a BlockItem, get the block of that item and sets this cup to that
 			if (item instanceof BlockItem) {
 				worldIn.setBlockState(pos, ((BlockItem) item).getBlock().getDefaultState().with(FACING, state.get(FACING)).with(SWEETNESS, state.get(SWEETNESS)));
@@ -173,7 +174,7 @@ public class TeaBlock extends Block implements IGrabbable {
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 		List<ItemStack> drops = super.getDrops(state, builder);
 		for (ItemStack drop : drops) {
-			if (drop.getItem() instanceof TeaItem) {
+			if (drop.getItem() == asItem()) {
 				CompoundNBT tag = drop.getOrCreateTag();
 				CompoundNBT blockStateTag = tag.getCompound("BlockStateTag");
 				blockStateTag.putString("sweetness", state.get(SWEETNESS).toString());

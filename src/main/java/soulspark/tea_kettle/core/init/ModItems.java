@@ -19,8 +19,9 @@ public class ModItems {
 	private static final Item.Properties KETTLE_PROPERTIES = new Item.Properties().maxStackSize(1);
 	public static final ArrayList<RegistryObject<TeaItem>> TEAS = new ArrayList<>();
 	
-	public static final RegistryObject<LegacyKettleItem> LEGACY_KETTLE = ITEMS.register("kettle", () ->
-			new LegacyKettleItem(KETTLE_PROPERTIES));
+	// TODO: update all items to use new register() method
+	
+	public static final RegistryObject<LegacyKettleItem> LEGACY_KETTLE = ITEMS.register("kettle", () -> new LegacyKettleItem(KETTLE_PROPERTIES));
 	
 	public static final RegistryObject<EmptyKettleItem> EMPTY_KETTLE = ITEMS.register("empty_kettle", () ->
 			new EmptyKettleItem(ModBlocks.EMPTY_KETTLE.get(), KETTLE_PROPERTIES.group(ItemGroup.DECORATIONS).maxStackSize(16)));

@@ -1,19 +1,26 @@
 package soulspark.tea_kettle.core;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
@@ -26,8 +33,12 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import soulspark.tea_kettle.common.blocks.IGrabbable;
 import soulspark.tea_kettle.common.items.TeaItem;
+import soulspark.tea_kettle.core.compat.CompatHandler;
+import soulspark.tea_kettle.core.init.ModBlocks;
 import soulspark.tea_kettle.core.init.ModEffects;
 import soulspark.tea_kettle.core.init.ModFeatures;
+import soulspark.tea_kettle.core.init.ModItems;
+import soulspark.tea_kettle.core.util.TeaKettleUtils;
 
 public class CommonEvents {
 	@SubscribeEvent
@@ -61,29 +72,71 @@ public class CommonEvents {
 		}
 	}
 	
+	@SuppressWarnings("ConstantConditions")
 	@SubscribeEvent
 	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event) {
-		PlayerEntity player = event.getPlayer();
 		World world = event.getWorld();
+		ItemStack handStack = event.getItemStack();
+		Item item = handStack.getItem();
+		PlayerEntity player = event.getPlayer();
 		BlockState state = world.getBlockState(event.getPos());
 		
-		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable) {
-			ItemStack stack = event.getItemStack();
+		// grabbing milk from CfB's milk jars
+		if (CompatHandler.onRightClickBlock(event) != ActionResultType.PASS) {
+			event.setCanceled(true);
+			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
+		}
+		// grabbing blocks (like cups and kettles) while sneaking
+		else if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable) {
 			IGrabbable grabbable = (IGrabbable) state.getBlock();
 			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), event.getPos()).copy();
 			
 			if (!world.isRemote) {
-				if (stack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
-				else if (stack.isItemEqual(grabStack) && stack.getCount() < stack.getMaxStackSize()) stack.grow(1);
+				if (handStack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
+				else if (handStack.isItemEqual(grabStack) && handStack.getCount() < handStack.getMaxStackSize()) handStack.grow(1);
 				else if (!player.inventory.addItemStackToInventory(grabStack)) return;
 			}
-
+			
 			if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 			else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
 			grabbable.grab(state, event.getWorld(), event.getPos());
 			
 			event.setCanceled(true);
 			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
+		}
+		// filling up the empty kettle with water from a cauldron
+		else if (handStack.getItem() == ModItems.EMPTY_KETTLE.get() && state.isIn(Blocks.CAULDRON) && state.get(CauldronBlock.LEVEL) == 3) {
+			player.setHeldItem(event.getHand(), DrinkHelper.fill(handStack.copy(), player, new ItemStack(ModItems.WATER_KETTLE.get())));
+			world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			((CauldronBlock) Blocks.CAULDRON).setWaterLevel(world, event.getPos(), state, 0);
+			
+			event.setCanceled(true);
+			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
+		}
+		else if (player.isSneaking() && event.getFace() != null) {
+			BlockItem blockItem = ModBlocks.TEA_ITEM_TO_BLOCK.get(item.getRegistryName());
+			if (blockItem != null) {
+				ItemStack blockItemStack = new ItemStack(blockItem);
+				if (handStack.hasTag()) blockItemStack.setTag(handStack.getTag().copy());
+				
+				ActionResultType result = blockItem.tryPlace(new BlockItemUseContext(player, event.getHand(), blockItemStack,
+						new BlockRayTraceResult(player.getLookVec(), event.getFace(), event.getPos(), false)));
+				
+				if (result.isSuccessOrConsume()) {
+					if (!player.abilities.isCreativeMode) handStack.shrink(1);
+					event.setCanceled(true);
+					event.setCancellationResult(ActionResultType.SUCCESS);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onItemUsed(LivingEntityUseItemEvent.Tick event) {
+		ItemStack handStack = event.getItem();
+		if (event.getEntityLiving().isServerWorld() && ModBlocks.TEA_ITEM_TO_BLOCK.containsKey(handStack.getItem().getRegistryName()) && event.getDuration() == 1) {
+			TeaItem.sweetnessFactor = 0.75 + 0.25 * Math.pow(TeaKettleUtils.getSweetness(handStack) * 2, 1.6);
+			//TeaKettle.LOGGER.info("duration! : {}", event.getDuration());
 		}
 	}
 	

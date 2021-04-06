@@ -17,17 +17,12 @@ public class LegacyKettleTileEntity extends TileEntity implements ITickableTileE
 	
 	@Override
 	public void tick() {
-		TeaKettle.LOGGER.info("I tried so hard!");
-		
 		if (world == null) return;
 		
 		BlockState state = getBlockState();
 		
-		TeaKettle.LOGGER.info("and got so far!!");
-		
 		if (!world.isRemote) {
 			BlockState upgradedState;
-			TeaKettle.LOGGER.info("but in the end");
 			
 			LegacyKettleBlock.Content content = state.get(LegacyKettleBlock.CONTENT);
 			

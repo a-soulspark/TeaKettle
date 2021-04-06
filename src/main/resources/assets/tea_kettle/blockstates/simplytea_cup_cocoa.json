@@ -1,0 +1,28 @@
+{
+	"multipart": [
+		{
+			"apply": { "model": "tea_kettle:block/simply_cup", "y": 180 },
+			"when": { "facing": "north" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/simply_cup", "y": 90 },
+			"when": { "facing": "west" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/simply_cup", "y": 0 },
+			"when": { "facing": "south" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/simply_cup", "y": 270 },
+			"when": { "facing": "east" }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/simply_teas/cocoa" },
+			"when": { "fullness": 2 }
+		},
+		{
+			"apply": { "model": "tea_kettle:block/simply_teas/cocoa_low" },
+			"when": { "fullness": 1 }
+		}
+	]
+}

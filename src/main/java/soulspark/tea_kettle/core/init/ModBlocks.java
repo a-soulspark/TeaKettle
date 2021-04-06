@@ -5,17 +5,32 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.blocks.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 public class ModBlocks {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TeaKettle.MODID);
+	public static final ArrayList<CupBlock> CUPS = new ArrayList<>();
 	
-	private static final AbstractBlock.Properties KETTLE_PROPERTIES = AbstractBlock.Properties.create(Material.IRON, MaterialColor.BLUE).hardnessAndResistance(0.5f).sound(SoundType.METAL).notSolid();
-	private static final AbstractBlock.Properties CUP_PROPERTIES = AbstractBlock.Properties.create(Material.ROCK, MaterialColor.WHITE_TERRACOTTA).hardnessAndResistance(0.0f).sound(SoundType.STONE).notSolid();
+	public static final Map<ResourceLocation, BlockItem> TEA_ITEM_TO_BLOCK = new HashMap<>();
+	
+	public static final AbstractBlock.Properties KETTLE_PROPERTIES = AbstractBlock.Properties.create(Material.IRON, MaterialColor.BLUE).hardnessAndResistance(0.5f).sound(SoundType.METAL).notSolid();
+	public static final AbstractBlock.Properties CUP_PROPERTIES = AbstractBlock.Properties.create(Material.ROCK, MaterialColor.WHITE_TERRACOTTA).hardnessAndResistance(0.0f).sound(SoundType.STONE).notSolid();
+	
+	public static final RegistryObject<TeaBushBlock> TEA_BUSH = BLOCKS.register("tea_bush", () ->
+			new TeaBushBlock(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH).notSolid()));
 	
 	public static final RegistryObject<LegacyKettleBlock> LEGACY_KETTLE = BLOCKS.register("kettle", () ->
 			new LegacyKettleBlock(KETTLE_PROPERTIES));
@@ -47,6 +62,14 @@ public class ModBlocks {
 	
 	private static RegistryObject<TeaBlock> registerTea(String name) { return BLOCKS.register(name, () -> new TeaBlock(CUP_PROPERTIES)); }
 	
-	public static final RegistryObject<TeaBushBlock> TEA_BUSH = BLOCKS.register("tea_bush", () ->
-			new TeaBushBlock(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH).notSolid()));
+	public static void registerSimplyTea(ResourceLocation name, IForgeRegistry<Block> registry) {
+		registerExternalBlock(nameIn -> new SimplyTeaBlock(name, CUP_PROPERTIES), name, registry);
+	}
+	
+	public static void registerExternalBlock(Function<ResourceLocation, Block> constructor, ResourceLocation name, IForgeRegistry<Block> registry) {
+		Block block = constructor.apply(name).setRegistryName(new ResourceLocation(TeaKettle.MODID, name.getNamespace() + "_" + name.getPath()));
+		
+		registry.register(block);
+		TEA_ITEM_TO_BLOCK.put(name, new BlockItem(block, new Item.Properties()));
+	}
 }

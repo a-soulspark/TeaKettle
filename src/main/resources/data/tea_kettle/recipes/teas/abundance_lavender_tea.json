@@ -1,0 +1,5 @@
+{
+	"type": "tea_kettle:tea_steeping",
+	"ingredients": [{ "item": "abundance:lavender" }, { "tag": "minecraft:leaves" }],
+	"result": "tea_kettle:abundance_lavender_tea"
+}

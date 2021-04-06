@@ -1,7 +1,9 @@
 package soulspark.tea_kettle.core.util;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
+import soulspark.tea_kettle.TeaKettle;
 
 public class CupItemHandler extends ItemStackHandler {
 	private final Notify onDirtyCallback;
@@ -10,17 +12,53 @@ public class CupItemHandler extends ItemStackHandler {
 		super(size);
 		onDirtyCallback = onDirty;
 	}
+	/*
+	so.
+			add a "getTopStack()" method for easily accessing the most recent stack
+			then use that for getGrabStack
+	and that kinda stuff
+			make big size
+	and then improve the JEI Addon thingy
+	gn*/
 	
-	public ItemStack getStack() {
-		return getStackInSlot(0);
+	public ItemStack getLastStack() {
+		for (int i = stacks.size() - 1; i >= 0; i--) {
+			ItemStack stack = getStackInSlot(i);
+			if (!stack.isEmpty()) return stack;
+		}
+		return ItemStack.EMPTY;
+	}
+	
+	public void setLastStack(ItemStack stack) {
+		TeaKettle.LOGGER.info(stack);
+		for (int i = stacks.size() - 1; i >= 0; i--) {
+			if (!getStackInSlot(i).isEmpty()) {
+				setStackInSlot(i, stack);
+				break;
+			}
+		}
+	}
+	
+	public boolean addStack(ItemStack stack) {
+		for (int i = 0; i < stacks.size(); i++) {
+			if (getStackInSlot(i).isEmpty()) {
+				setStackInSlot(i, stack);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isEmpty() {
-		return getStack().isEmpty();
+		return getStackInSlot(0).isEmpty();
 	}
 	
-	public void setStack(ItemStack stack) {
-		setStackInSlot(0, stack);
+	public boolean isFull() {
+		return !getStackInSlot(stacks.size() - 1).isEmpty();
+	}
+	
+	public NonNullList<ItemStack> getStacks() {
+		return stacks;
 	}
 	
 	@Override

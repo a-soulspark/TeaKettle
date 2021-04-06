@@ -3,6 +3,7 @@ package soulspark.tea_kettle.common.items;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
@@ -14,9 +15,15 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.core.init.ModItems;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EmptyKettleItem extends KettleItem {
 	public EmptyKettleItem(KettleBlock block, Properties builder) {
@@ -32,7 +39,6 @@ public class EmptyKettleItem extends KettleItem {
 				ItemStack returnStack = result.getResult();
 				PlayerEntity player = context.getPlayer();
 				
-				TeaKettle.LOGGER.info("hummana!");
 				returnStack = fillKettle(stack.copy(), player, returnStack);
 				player.setHeldItem(context.getHand(), returnStack);
 				
@@ -51,8 +57,6 @@ public class EmptyKettleItem extends KettleItem {
 			ItemStack returnStack = fillKettle(stack.copy(), playerIn, new ItemStack(ModItems.MILK_KETTLE.get()));
 			playerIn.setHeldItem(hand, returnStack);
 			
-			//if (playerIn instanceof ServerPlayerEntity) ((ServerPlayerEntity) playerIn).sendContainerToPlayer(playerIn.container);
-			playerIn.setHeldItem(hand, returnStack);
 			return ActionResultType.func_233537_a_(playerIn.world.isRemote);
 		}
 		
@@ -85,10 +89,6 @@ public class EmptyKettleItem extends KettleItem {
 			if (worldIn.getFluidState(pos).isTagged(FluidTags.WATER)) {
 				// creates a copy of the kettle stack, now with water
 				ItemStack filledStack = new ItemStack(ModItems.WATER_KETTLE.get());
-				CompoundNBT tag = new CompoundNBT();
-				tag.putInt("fullness", 4);
-				filledStack.setTagInfo("BlockStateTag", tag);
-				
 				worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 				return ActionResult.func_233538_a_(filledStack, worldIn.isRemote);
 			}
@@ -100,5 +100,32 @@ public class EmptyKettleItem extends KettleItem {
 	protected ItemStack fillKettle(ItemStack emptyStack, PlayerEntity player, ItemStack stack) {
 		player.addStat(Stats.ITEM_USED.get(this));
 		return DrinkHelper.fill(emptyStack, player, stack);
+	}
+	
+/*
+	TODO:
+	 > the brewing of kool tea
+	  >> how steam doe??
+*/
+	
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return new FluidHandlerItemStack(stack, 1000) {
+			@Override
+			public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+				return stack.getFluid() == Fluids.WATER;
+			}
+			
+			@Override
+			public int fill(FluidStack resource, FluidAction doFill) {
+				if (resource.getAmount() >= 1000) {
+					super.fill(resource, doFill);
+					container = new ItemStack(ModItems.WATER_KETTLE.get());
+					return 1000;
+				}
+				return 0;
+			}
+		};
 	}
 }

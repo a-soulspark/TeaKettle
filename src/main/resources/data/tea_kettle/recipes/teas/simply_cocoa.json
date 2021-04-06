@@ -1,0 +1,5 @@
+{
+	"type": "tea_kettle:milky_drink",
+	"ingredients": [{ "item": "minecraft:cocoa_beans" }, { "item": "minecraft:cocoa_beans" }],
+	"result": "simplytea:cup_cocoa"
+}

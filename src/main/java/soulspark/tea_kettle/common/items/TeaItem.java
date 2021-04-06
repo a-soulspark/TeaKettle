@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.stats.Stats;
@@ -16,6 +17,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import soulspark.tea_kettle.core.init.ModItems;
+import soulspark.tea_kettle.core.util.TeaKettleUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -47,8 +49,15 @@ public class TeaItem extends BlockItem {
 	}
 	
 	@Override
+	// only place tea if you're sneaking
+	public ActionResultType tryPlace(BlockItemUseContext context) {
+		if (context.getPlayer() != null && !context.getPlayer().isSneaking()) return ActionResultType.FAIL;
+		return super.tryPlace(context);
+	}
+	
+	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if (!worldIn.isRemote) sweetnessFactor = 1 + Math.max(0, getSweetness(stack) - 0.5);
+		if (!worldIn.isRemote) sweetnessFactor = 1 + Math.max(0, TeaKettleUtils.getSweetness(stack) * 2 - 0.5);
 		super.onItemUseFinish(stack, worldIn, entityLiving);
 		sweetnessFactor = 1;
 		
@@ -73,17 +82,12 @@ public class TeaItem extends BlockItem {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		switch (getSweetness(stack)) {
+		switch ((int)(TeaKettleUtils.getSweetness(stack) * 2)) {
 			case 1:
 				tooltip.add(new TranslationTextComponent("tea_kettle.tea_sweetened_weak").modifyStyle(style -> style.forceFormatting(TextFormatting.GRAY)));
 				break;
 			case 2:
 				tooltip.add(new TranslationTextComponent("tea_kettle.tea_sweetened_strong").modifyStyle(style -> style.forceFormatting(TextFormatting.GRAY)));
 		}
-	}
-	
-	@SuppressWarnings("ConstantConditions")
-	private int getSweetness(ItemStack stack) {
-		return !stack.hasTag() ? 0 : Integer.parseInt(stack.getTag().getCompound("BlockStateTag").getString("sweetness"));
 	}
 }

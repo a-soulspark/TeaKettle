@@ -16,6 +16,8 @@
 	"block.tea_kettle.oolong_latte": "Cup of Oolong Latte",
 	"block.tea_kettle.black_latte": "Cup of Black Latte",
 	"block.tea_kettle.tea_leaves": "Tea Leaves",
+
+	"item.tea_kettle.abundance_lavender_tea": "Cup of Lavender Tea",
 	"item.tea_kettle.rose_petal": "Rose Petal",
 	"item.tea_kettle.bamboo_leaf": "Bamboo Leaf",
 	"item.tea_kettle.tea_leaf": "Tea Leaf",
@@ -23,11 +25,20 @@
 	"item.tea_kettle.oolong_tea_leaf": "Oolong Tea Leaf",
 	"item.tea_kettle.black_tea_leaf": "Black Tea Leaf",
 	"item.tea_kettle.half_honey_bottle": "Half-Empty Honey Bottle",
-	"block.minecraft.bed.caffeine": "You couldn't fall asleep; too caffeinated",
+
 	"effect.tea_kettle.caffeine": "Caffeine",
 	"effect.tea_kettle.zen": "Zen",
+
 	"tea_kettle.tea_sweetened_weak": "Slighty Sweetened",
 	"tea_kettle.tea_sweetened_strong": "Well Sweetened",
+	"block.minecraft.bed.caffeine": "You couldn't fall asleep; too caffeinated",
 	"tea_kettle.jei.tea_steeping": "Tea Steeping",
-	"tea_kettle.jei.tea_mixing": "Tea Mixing"
+	"tea_kettle.jei.milky_drink": "Milky Drinks",
+	"tea_kettle.jei.tea_mixing": "Tea Mixing",
+
+	"block.tea_kettle.simplytea_cup_tea_green": "Cup of Green Simply Tea",
+	"block.tea_kettle.simplytea_cup_tea_black": "Cup of Black Simply Tea",
+	"block.tea_kettle.simplytea_cup_tea_chorus": "Cup of Chorus Tea",
+	"block.tea_kettle.simplytea_cup_tea_floral": "Cup of Floral Tea",
+	"block.tea_kettle.simplytea_cup_cocoa": "Cup of Hot Chocolate"
 }

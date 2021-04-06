@@ -9,6 +9,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import soulspark.tea_kettle.TeaKettle;
+import soulspark.tea_kettle.common.recipes.MilkyDrinkRecipe;
 import soulspark.tea_kettle.common.recipes.ShearingRecipe;
 import soulspark.tea_kettle.common.recipes.TeaMixingRecipe;
 import soulspark.tea_kettle.common.recipes.TeaSteepingRecipe;
@@ -16,6 +17,7 @@ import soulspark.tea_kettle.common.recipes.TeaSteepingRecipe;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = TeaKettle.MODID)
 public class ModRecipeTypes {
 	public static final IRecipeType<TeaSteepingRecipe> TEA_STEEPING = createRecipeType();
+	public static final IRecipeType<MilkyDrinkRecipe> MILKY_DRINK = createRecipeType();
 	public static final IRecipeType<TeaMixingRecipe> TEA_MIXING = createRecipeType();
 	public static final IRecipeType<ShearingRecipe> SHEARING = createRecipeType();
 	
@@ -28,7 +30,8 @@ public class ModRecipeTypes {
 		};
 	}
 	
-	public static final IRecipeSerializer<TeaSteepingRecipe> TEA_STEEPING_SERIALIZER = new TeaSteepingRecipe.Serializer();
+	public static final IRecipeSerializer<TeaSteepingRecipe> TEA_STEEPING_SERIALIZER = new TeaSteepingRecipe.Serializer<>(TeaSteepingRecipe::new);
+	public static final IRecipeSerializer<MilkyDrinkRecipe> MILKY_DRINK_SERIALIZER = new TeaSteepingRecipe.Serializer<>(MilkyDrinkRecipe::new);
 	public static final IRecipeSerializer<TeaMixingRecipe> TEA_MIXING_SERIALIZER = new TeaMixingRecipe.Serializer();
 	public static final IRecipeSerializer<ShearingRecipe> SHEARING_SERIALIZER = new ShearingRecipe.Serializer();
 	
@@ -45,5 +48,9 @@ public class ModRecipeTypes {
 		id = new ResourceLocation(TeaKettle.MODID, "tea_mixing");
 		Registry.register(Registry.RECIPE_TYPE, id, TEA_MIXING);
 		event.getRegistry().register(TEA_MIXING_SERIALIZER.setRegistryName(id));
+		
+		id = new ResourceLocation(TeaKettle.MODID, "milky_drink");
+		Registry.register(Registry.RECIPE_TYPE, id, MILKY_DRINK);
+		event.getRegistry().register(MILKY_DRINK_SERIALIZER.setRegistryName(id));
 	}
 }

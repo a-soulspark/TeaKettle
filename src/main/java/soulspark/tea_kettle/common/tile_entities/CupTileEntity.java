@@ -13,7 +13,7 @@ public class CupTileEntity extends TileEntity {
 	
 	public CupTileEntity() {
 		super(ModTileEntities.CUP.get());
-		handler = new CupItemHandler(1, this::notifyChanged);
+		handler = new CupItemHandler(2, this::notifyChanged);
 	}
 	
 	@Override

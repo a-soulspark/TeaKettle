@@ -1,0 +1,6 @@
+{
+	"parent": "tea_kettle:block/simply_teas/simply_tea_fluid",
+	"textures": {
+		"fluid": "tea_kettle:block/teas/simplytea_cocoa"
+	}
+}
