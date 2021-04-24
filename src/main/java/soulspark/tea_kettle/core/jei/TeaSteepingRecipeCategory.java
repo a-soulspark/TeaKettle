@@ -1,6 +1,7 @@
 package soulspark.tea_kettle.core.jei;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -17,14 +18,16 @@ import soulspark.tea_kettle.common.recipes.TeaSteepingRecipe;
 public class TeaSteepingRecipeCategory<T extends TeaSteepingRecipe> implements IRecipeCategory<T> {
 	public final ResourceLocation UID;
 	protected final Class<? extends T> recipeClass;
-	protected final IDrawable background;
+	protected final IDrawable[] backgrounds;
 	protected final IDrawable icon;
 	protected final String title;
 
 	public TeaSteepingRecipeCategory(Class<? extends T> recipeClass, String name, ItemStack iconStack, IGuiHelper helper) {
 		this.recipeClass = recipeClass;
 		UID = new ResourceLocation(TeaKettle.MODID, name);
-		background = helper.createDrawable(new ResourceLocation(String.format("tea_kettle:textures/gui/jei_%s.png", UID.getPath())), 0, 0, 96 ,44);
+		backgrounds = new IDrawable[] {
+				helper.createDrawable(new ResourceLocation(String.format("tea_kettle:textures/gui/jei_%s.png", UID.getPath())), 0, 0, 96 ,44),
+				helper.createDrawable(new ResourceLocation(String.format("tea_kettle:textures/gui/jei_%s_pair.png", UID.getPath())), 0, 0, 96 ,44)};
 		icon = helper.createDrawableIngredient(iconStack);
 		title = I18n.format("tea_kettle.jei." + UID.getPath());
 	}
@@ -41,11 +44,20 @@ public class TeaSteepingRecipeCategory<T extends TeaSteepingRecipe> implements I
 	}
 	@Override
 	public IDrawable getBackground() {
-		return background;
+		return backgrounds[0];
 	}
 	@Override
 	public IDrawable getIcon() {
 		return icon;
+	}
+	
+	@Override
+	public void draw(T recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+		int ingredientCount = recipe.getIngredients().size();
+		
+		if (ingredientCount == 2) {
+			backgrounds[1].draw(matrixStack);
+		}
 	}
 	
 	@Override
@@ -62,10 +74,16 @@ public class TeaSteepingRecipeCategory<T extends TeaSteepingRecipe> implements I
 	
 	@Override
 	public void setRecipe(IRecipeLayout iRecipeLayout, T recipe, IIngredients iIngredients) {
-		iRecipeLayout.getItemStacks().init(0, true, 6, 20);
-		iRecipeLayout.getItemStacks().set(0, iIngredients.getInputs(VanillaTypes.ITEM).get(0));
+		int i = 0;
+		iRecipeLayout.getItemStacks().init(i, true, 6, 20);
+		iRecipeLayout.getItemStacks().set(i++, iIngredients.getInputs(VanillaTypes.ITEM).get(0));
 		
-		iRecipeLayout.getItemStacks().init(3, true, 72, 20);
-		iRecipeLayout.getItemStacks().set(3, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
+		if (recipe.getIngredients().size() > 1) {
+			iRecipeLayout.getItemStacks().init(i, true, 24, 20);
+			iRecipeLayout.getItemStacks().set(i++, iIngredients.getInputs(VanillaTypes.ITEM).get(1));
+		}
+		
+		iRecipeLayout.getItemStacks().init(i, true, 73, 20);
+		iRecipeLayout.getItemStacks().set(i, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
 	}
 }

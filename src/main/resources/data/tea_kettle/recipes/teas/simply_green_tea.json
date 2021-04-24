@@ -1,5 +1,22 @@
 {
-	"type": "tea_kettle:tea_steeping",
-	"ingredients": [{ "item": "simplytea:teabag_green" }],
-	"result": "simplytea:cup_tea_green"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "modid": "simplytea",
+          "type": "forge:mod_loaded"
+        }
+      ],
+      "recipe": {
+        "type": "tea_kettle:tea_steeping",
+        "ingredients": [
+          {
+            "item": "simplytea:teabag_green"
+          }
+        ],
+        "result": "simplytea:cup_tea_green"
+      }
+    }
+  ]
 }

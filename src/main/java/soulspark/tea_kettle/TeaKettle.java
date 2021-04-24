@@ -11,9 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import soulspark.tea_kettle.core.ClientEvents;
 import soulspark.tea_kettle.core.CommonEvents;
-import soulspark.tea_kettle.core.compat.CFBInteropProxy;
-import soulspark.tea_kettle.core.compat.CompatHandler;
-import soulspark.tea_kettle.core.compat.SimplyTeaInteropProxy;
+import soulspark.tea_kettle.core.compat.*;
 import soulspark.tea_kettle.core.init.ClientInitEvents;
 import soulspark.tea_kettle.core.init.CommonInitEvents;
 import soulspark.tea_kettle.core.init.RegistryHandler;
@@ -24,30 +22,31 @@ public class TeaKettle {
 	public static final String MODID = "tea_kettle";
 	
 	// Directly reference a log4j logger.
+	@SuppressWarnings("unused")
 	public static final Logger LOGGER = LogManager.getLogger();
 	
-	public static IEventBus MOD_BUS;
-	
 	public TeaKettle() {
-		MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
 		RegistryHandler.register(MOD_BUS);
 		
 		// registers common events, and client-only events only if in client (obviously)
-		registerCommonEvents();
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> TeaKettle::registerClientEvents);
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> registerClientEvents(MOD_BUS));
+		registerCommonEvents(MOD_BUS);
 		
+		// register compatibility proxies
 		if (ModList.get().isLoaded("simplytea")) CompatHandler.PROXIES.add(new SimplyTeaInteropProxy());
-		// TODO: if (ModList.get().isLoaded("abundance")) CompatHandler.PROXIES.add(new AbundanceInteropProxy());
+		if (ModList.get().isLoaded("abundance")) CompatHandler.PROXIES.add(new AbundanceInteropProxy());
+		if (ModList.get().isLoaded("supplementaries")) CompatHandler.PROXIES.add(new SupplementariesInteropProxy());
 		if (ModList.get().isLoaded("cookingforblockheads")) CompatHandler.PROXIES.add(new CFBInteropProxy());
 	}
 	
-	public static void registerCommonEvents() {
+	public static void registerCommonEvents(IEventBus modBus) {
 		MinecraftForge.EVENT_BUS.register(CommonEvents.class);
-		MOD_BUS.register(CommonInitEvents.class);
+		modBus.register(CommonInitEvents.class);
 	}
 	
-	public static void registerClientEvents() {
+	public static void registerClientEvents(IEventBus modBus) {
 		MinecraftForge.EVENT_BUS.register(ClientEvents.class);
-		MOD_BUS.register(ClientInitEvents.class);
+		modBus.register(ClientInitEvents.class);
 	}
 }

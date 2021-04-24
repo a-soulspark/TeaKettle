@@ -3,7 +3,6 @@ package soulspark.tea_kettle.common.tile_entities;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.blocks.FilledKettleBlock;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.common.blocks.LegacyKettleBlock;
@@ -35,40 +34,4 @@ public class LegacyKettleTileEntity extends TileEntity implements ITickableTileE
 			
 		}
 	}
-	
-	/*
-	@Override
-	// reads the data in a packet when it's received [by default it doesn't do anything]
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) { read(getBlockState(), pkt.getNbtCompound()); }
-	
-	void notifyChanged() { notifyChanged(getBlockState()); }
-	
-	void notifyChanged(BlockState oldState) {
-		this.markDirty();
-		if (world != null) world.notifyBlockUpdate(this.getPos(), oldState, this.getBlockState(), 3);
-	}
-	
-	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
-		boilingTicks = nbt.contains("BoilingTicks") ? nbt.getInt("BoilingTicks") : 0;
-	}
-	
-	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		super.write(compound);
-		compound.putInt("BoilingTicks", boilingTicks);
-		return compound;
-	}
-	
-	@Nullable
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, -1, getUpdateTag());
-	}
-	
-	@Override
-	public CompoundNBT getUpdateTag() {
-		return write(new CompoundNBT());
-	}*/
 }

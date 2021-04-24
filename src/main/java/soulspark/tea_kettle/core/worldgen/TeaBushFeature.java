@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class TeaBushFeature extends Feature<NoFeatureConfig> {
 	public TeaBushFeature() {
-		super(NoFeatureConfig.field_236558_a_);
+		super(NoFeatureConfig.CODEC);
 	}
 	
 	@Override

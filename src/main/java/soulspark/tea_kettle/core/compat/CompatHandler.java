@@ -13,7 +13,7 @@ import java.util.HashSet;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = TeaKettle.MODID)
 public class CompatHandler {
-	public static HashSet<InteropProxy> PROXIES = new HashSet<>();
+	public static final HashSet<InteropProxy> PROXIES = new HashSet<>();
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -28,7 +28,11 @@ public class CompatHandler {
 	public static ActionResultType onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 		for (InteropProxy proxy : PROXIES) {
 			ActionResultType result = proxy.onRightClickBlock(event);
-			if (result != ActionResultType.PASS) return result;
+			if (result != ActionResultType.PASS) {
+				event.setCanceled(true);
+				event.setCancellationResult(result);
+				return result;
+			}
 		}
 		return ActionResultType.PASS;
 	}

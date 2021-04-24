@@ -14,6 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.blocks.*;
+import soulspark.tea_kettle.core.util.TeaKettleUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,10 +67,11 @@ public class ModBlocks {
 		registerExternalBlock(nameIn -> new SimplyTeaBlock(name, CUP_PROPERTIES), name, registry);
 	}
 	
-	public static void registerExternalBlock(Function<ResourceLocation, Block> constructor, ResourceLocation name, IForgeRegistry<Block> registry) {
-		Block block = constructor.apply(name).setRegistryName(new ResourceLocation(TeaKettle.MODID, name.getNamespace() + "_" + name.getPath()));
+	public static void registerExternalBlock(Function<ResourceLocation, Block> constructor, ResourceLocation itemName, IForgeRegistry<Block> registry) {
+		ResourceLocation blockName = TeaKettleUtils.getExternalBlockName(itemName);
+		Block block = constructor.apply(itemName).setRegistryName(blockName);
 		
 		registry.register(block);
-		TEA_ITEM_TO_BLOCK.put(name, new BlockItem(block, new Item.Properties()));
+		TEA_ITEM_TO_BLOCK.put(itemName, new BlockItem(block, new Item.Properties()));
 	}
 }

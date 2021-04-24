@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ExternalTeaBlock extends TeaBlock {
-	public ResourceLocation itemName;
+	public final ResourceLocation itemName;
 	public Item item;
 	
 	public ExternalTeaBlock(ResourceLocation itemName, Properties properties) {

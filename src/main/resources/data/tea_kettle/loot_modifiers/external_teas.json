@@ -1,0 +1,8 @@
+{
+	"conditions": [
+		{
+			"condition": "block_state_property",
+			"block":"#tea_kettle:external_teas"
+		}
+	]
+}

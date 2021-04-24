@@ -23,8 +23,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TeaItem extends BlockItem {
-	public static double sweetnessFactor = 1;
-	
 	public TeaItem(Block blockIn, Properties builder) {
 		super(blockIn, builder);
 	}
@@ -40,7 +38,8 @@ public class TeaItem extends BlockItem {
 	public SoundEvent getEatSound() {
 		return SoundEvents.ENTITY_GENERIC_DRINK;
 	}
-	/**
+
+	/*	*//**
 	 * Called to trigger the item's "innate" right click behavior. To handle when this item is used on a Block, see
 	 * {@link #onItemUse}.
 	 */
@@ -57,9 +56,9 @@ public class TeaItem extends BlockItem {
 	
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if (!worldIn.isRemote) sweetnessFactor = 1 + Math.max(0, TeaKettleUtils.getSweetness(stack) * 2 - 0.5);
+		if (!worldIn.isRemote) entityLiving.getPersistentData().putDouble("TeaKettleSweetnessFactor", 1 + Math.max(0, TeaKettleUtils.getSweetness(stack) * 2 - 0.5));
 		super.onItemUseFinish(stack, worldIn, entityLiving);
-		sweetnessFactor = 1;
+		entityLiving.getPersistentData().remove("TeaKettleSweetnessFactor");
 		
 		PlayerEntity player = entityLiving instanceof PlayerEntity ? (PlayerEntity) entityLiving : null;
 		

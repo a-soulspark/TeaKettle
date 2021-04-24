@@ -1,6 +1,7 @@
 {
 	"parent": "item/generated",
+	"loader": "tea_kettle:tea",
 	"textures": {
-		"layer0": "tea_kettle:item/abundance_lavender_tea"
+		"base": "tea_kettle:item/abundance_lavender_tea"
 	}
 }

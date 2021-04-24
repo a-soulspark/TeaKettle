@@ -9,7 +9,7 @@ import soulspark.tea_kettle.core.init.ModTileEntities;
 import soulspark.tea_kettle.core.util.CupItemHandler;
 
 public class CupTileEntity extends TileEntity {
-	public CupItemHandler handler;
+	public final CupItemHandler handler;
 	
 	public CupTileEntity() {
 		super(ModTileEntities.CUP.get());

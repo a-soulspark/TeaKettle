@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.core.init.ModItems;
 
