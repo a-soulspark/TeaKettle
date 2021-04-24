@@ -88,7 +88,7 @@ public class TeaBlock extends Block implements IGrabbable {
 				if (stack.isEmpty()) player.setHeldItem(handIn, teaStack);
 				// send the update to clients and remove the block
 				((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
-				worldIn.removeBlock(pos, false);
+				grab(worldIn, pos);
 			}
 			// in the client, just play a little equip sound because you can't do anything drop-related there
 			else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
