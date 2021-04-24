@@ -1,6 +1,6 @@
 package soulspark.tea_kettle.core.compat;
 
-import net.blay09.mods.cookingforblockheads.block.ModBlocks;
+import net.blay09.mods.cookingforblockheads.block.MilkJarBlock;
 import net.blay09.mods.cookingforblockheads.tile.MilkJarTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,8 +21,8 @@ public class CFBInteropProxy implements InteropProxy {
 		ItemStack heldStack = event.getItemStack();
 		PlayerEntity player = event.getPlayer();
 		BlockState state = world.getBlockState(event.getPos());
-
-		if (heldStack.getItem() == ModItems.EMPTY_KETTLE.get() && state.isIn(ModBlocks.milkJar)) {
+		
+		if (heldStack.getItem() == ModItems.EMPTY_KETTLE.get() && state.getBlock() instanceof MilkJarBlock) {
 			MilkJarTileEntity tileEntity = (MilkJarTileEntity) world.getTileEntity(event.getPos());
 			if (tileEntity != null) {
 				if (tileEntity.getMilkAmount() >= 1000.0F) {

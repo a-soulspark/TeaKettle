@@ -27,7 +27,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.recipes.TeaSteepingRecipe;
 import soulspark.tea_kettle.common.tile_entities.CupTileEntity;
 import soulspark.tea_kettle.core.init.ModBlocks;
@@ -148,7 +147,6 @@ public class CupBlock extends Block implements IGrabbable {
 			// if a recipe for this exists
 			else {
 				ItemStack cupStack = cupTileEntity.handler.getLastStack();
-				KettleBlock.LOGGER.info("isnt full! {}", cupStack);
 				ItemStack[] ingredients = cupStack.isEmpty() ? new ItemStack[] { handStack } : new ItemStack[] { handStack, cupStack };
 				
 				if (isIngredient(ingredients, ModRecipeTypes.TEA_STEEPING, worldIn) || isIngredient(ingredients, ModRecipeTypes.MILKY_DRINK, worldIn)) {
@@ -204,7 +202,7 @@ public class CupBlock extends Block implements IGrabbable {
 	}
 	
 	@Override
-	public void grab(BlockState state, World world, BlockPos pos) {
+	public void grab(World world, BlockPos pos) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (!(tileEntity instanceof CupTileEntity) || world.isRemote) return;
 		CupTileEntity cupTileEntity = (CupTileEntity)tileEntity;

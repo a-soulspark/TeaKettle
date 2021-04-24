@@ -36,7 +36,7 @@ public class ClientInitEvents {
 		RenderTypeLookup.setRenderLayer(ModBlocks.OOLONG_LATTE.get(), RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModBlocks.BLACK_LATTE.get(), RenderType.getTranslucent());
 		
-		ModBlocks.TEA_ITEM_TO_BLOCK.forEach((name, item) -> RenderTypeLookup.setRenderLayer(item.getBlock(), RenderType.getTranslucent()));
+		ModBlocks.TEA_ITEM_TO_BLOCK.forEach((name, item) -> RenderTypeLookup.setRenderLayer(item.getBlock(), RenderType.getCutout()));
 		
 		ItemModelsProperties.registerProperty(ModItems.BOILING_KETTLE.get(), new ResourceLocation(TeaKettle.MODID, "fullness"), TeaKettleUtils::getFullness);
 		ItemModelsProperties.registerProperty(ModItems.BOILING_KETTLE.get(), new ResourceLocation(TeaKettle.MODID, "fullness"), TeaKettleUtils::getFullness);
@@ -55,6 +55,8 @@ public class ClientInitEvents {
 		event.addSprite(TeaModel.BASE_STEAM);
 		event.addSprite(TeaModel.WEAK_STEAM);
 		event.addSprite(TeaModel.STRONG_STEAM);
+		
 		ModItems.TEAS.forEach(reg -> event.addSprite(new ResourceLocation(TeaKettle.MODID, "item/" + reg.getId().getPath())));
+		event.addSprite(new ResourceLocation(TeaKettle.MODID, "item/abundance_lavender_tea"));
 	}
 }

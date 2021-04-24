@@ -13,8 +13,8 @@ import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class SteamParticle extends RisingParticle {
-	protected SteamParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, float scale, IAnimatedSprite spriteWithAge) {
-		super(world, x, y, z, 0.1F, 0.1F, 0.1F, motionX, motionY, motionZ, scale, spriteWithAge, 1, 8, 0.004D, true);
+	protected SteamParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, IAnimatedSprite spriteWithAge) {
+		super(world, x, y, z, 0.1F, 0.1F, 0.1F, motionX, motionY, motionZ, (float) 1.0, spriteWithAge, 1, 8, 0.004D, true);
 		float f = world.rand.nextFloat() * 0.2f + 0.8f;
 		particleRed = particleGreen = particleBlue = f;
 	}
@@ -37,7 +37,7 @@ public class SteamParticle extends RisingParticle {
 		@Nullable
 		@Override
 		public Particle makeParticle(BasicParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-			return new SteamParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, 1.0f, spriteSet);
+			return new SteamParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
 		}
 	}
 }

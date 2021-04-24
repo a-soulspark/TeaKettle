@@ -1,5 +1,25 @@
 {
-	"type": "tea_kettle:milky_drink",
-	"ingredients": [{ "item": "simplytea:teabag_black" }, { "item": "simplytea:tea_stick" }],
-	"result": "simplytea:cup_tea_chai"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "modid": "simplytea",
+          "type": "forge:mod_loaded"
+        }
+      ],
+      "recipe": {
+				"type": "tea_kettle:milky_drink",
+				"ingredients": [
+					{
+						"item": "simplytea:teabag_black"
+					},
+					{
+						"item": "simplytea:tea_stick"
+					}
+				],
+				"result": "simplytea:cup_tea_chai"
+			}
+		}
+	]
 }

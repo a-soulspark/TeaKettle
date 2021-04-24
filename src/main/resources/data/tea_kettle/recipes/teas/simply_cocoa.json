@@ -1,5 +1,25 @@
 {
-	"type": "tea_kettle:milky_drink",
-	"ingredients": [{ "item": "minecraft:cocoa_beans" }, { "item": "minecraft:cocoa_beans" }],
-	"result": "simplytea:cup_cocoa"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "modid": "simplytea",
+          "type": "forge:mod_loaded"
+        }
+      ],
+      "recipe": {
+        "type": "tea_kettle:milky_drink",
+        "ingredients": [
+          {
+            "item": "minecraft:cocoa_beans"
+          },
+          {
+            "item": "minecraft:cocoa_beans"
+          }
+        ],
+        "result": "simplytea:cup_cocoa"
+      }
+    }
+  ]
 }

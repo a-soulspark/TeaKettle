@@ -3,7 +3,6 @@ package soulspark.tea_kettle.core.util;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
-import soulspark.tea_kettle.TeaKettle;
 
 public class CupItemHandler extends ItemStackHandler {
 	private final Notify onDirtyCallback;
@@ -30,7 +29,6 @@ public class CupItemHandler extends ItemStackHandler {
 	}
 	
 	public void setLastStack(ItemStack stack) {
-		TeaKettle.LOGGER.info(stack);
 		for (int i = stacks.size() - 1; i >= 0; i--) {
 			if (!getStackInSlot(i).isEmpty()) {
 				setStackInSlot(i, stack);
@@ -51,10 +49,6 @@ public class CupItemHandler extends ItemStackHandler {
 	
 	public boolean isEmpty() {
 		return getStackInSlot(0).isEmpty();
-	}
-	
-	public boolean isFull() {
-		return !getStackInSlot(stacks.size() - 1).isEmpty();
 	}
 	
 	public NonNullList<ItemStack> getStacks() {

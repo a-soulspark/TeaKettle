@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 public interface IGrabbable {
 	ItemStack getGrabStack(BlockState state, World world, BlockPos pos);
 	
-	default void grab(BlockState state, World world, BlockPos pos) {
+	default void grab(World world, BlockPos pos) {
 		if (!world.isRemote) world.removeBlock(pos, false);
 	}
 }

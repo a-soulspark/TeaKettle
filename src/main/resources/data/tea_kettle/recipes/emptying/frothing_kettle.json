@@ -1,0 +1,7 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{ "item": "tea_kettle:frothing_kettle" }
+	],
+	"result": { "item": "tea_kettle:empty_kettle" }
+}

@@ -74,38 +74,6 @@ public class TeaSteepingRecipe implements IRecipe<IInventory> {
 	public ItemStack getIcon() {
 		return new ItemStack(ModItems.BOILING_KETTLE.get());
 	}
-	/*
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<TeaSteepingRecipe> {
-		@Override
-		public TeaSteepingRecipe read(ResourceLocation recipeId, JsonObject json) {
-			JsonElement ingredientJson = (JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
-			Ingredient ingredient = Ingredient.deserialize(ingredientJson);
-			
-			// throw error if there's no result
-			if (!json.has("result")) throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
-			
-			ItemStack itemStack;
-			if (json.get("result").isJsonObject()) itemStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
-			else {
-				String s1 = JSONUtils.getString(json, "result");
-				ResourceLocation resourcelocation = new ResourceLocation(s1);
-				itemStack = new ItemStack(Registry.ITEM.getOptional(resourcelocation).orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
-			}
-			
-			return new TeaSteepingRecipe(recipeId, ingredient, itemStack);
-		}
-		
-		public TeaSteepingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			Ingredient ingredient = Ingredient.read(buffer);
-			ItemStack itemstack = buffer.readItemStack();
-			return new TeaSteepingRecipe(recipeId, ingredient, itemstack);
-		}
-		
-		public void write(PacketBuffer buffer, TeaSteepingRecipe recipe) {
-			recipe.ingredient.write(buffer);
-			buffer.writeItemStack(recipe.result);
-		}
-	}*/
 	
 	public static class Serializer<T extends TeaSteepingRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
 		private final TeaSteepingRecipe.IFactory<T> factory;
@@ -123,8 +91,7 @@ public class TeaSteepingRecipe implements IRecipe<IInventory> {
 			else {
 				String resultName = JSONUtils.getString(json, "result");
 				ItemStack result = new ItemStack(Registry.ITEM.getOptional(new ResourceLocation(resultName)).orElseThrow(() -> new IllegalStateException("Item: " + resultName + " does not exist")));
-				
-				//ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+
 				return factory.create(recipeId, ingredients, result);
 			}
 		}

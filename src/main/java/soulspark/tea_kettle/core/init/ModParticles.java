@@ -8,7 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import soulspark.tea_kettle.TeaKettle;
 
 public class ModParticles {
-	public static DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, TeaKettle.MODID);
+	public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, TeaKettle.MODID);
 	
 	public static final RegistryObject<BasicParticleType> STEAM = PARTICLES.register("steam", () -> new BasicParticleType(false));
 	public static final RegistryObject<BasicParticleType> TEA_STEAM = PARTICLES.register("tea_steam", () -> new BasicParticleType(false));

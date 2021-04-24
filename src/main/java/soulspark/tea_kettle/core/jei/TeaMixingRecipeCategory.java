@@ -66,7 +66,7 @@ public class TeaMixingRecipeCategory implements IRecipeCategory<TeaMixingRecipe>
 		iRecipeLayout.getItemStacks().init(0, true, 6, 20);
 		iRecipeLayout.getItemStacks().set(0, iIngredients.getInputs(VanillaTypes.ITEM).get(0));
 
-		iRecipeLayout.getItemStacks().init(3, true, 72, 20);
+		iRecipeLayout.getItemStacks().init(3, true, 73, 20);
 		iRecipeLayout.getItemStacks().set(3, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
 	}
 }

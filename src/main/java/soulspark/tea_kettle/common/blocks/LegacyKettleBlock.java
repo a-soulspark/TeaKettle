@@ -45,27 +45,6 @@ public class LegacyKettleBlock extends Block {
 		return new LegacyKettleTileEntity();
 	}
 	
-	/*
-	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-		BlockState upgradedState;
-		
-		switch (state.get(LegacyKettleBlock.CONTENT)) {
-			case EMPTY:
-				upgradedState = ModBlocks.EMPTY_KETTLE.get().getDefaultState();
-				break;
-			case WATER:
-				upgradedState = ModBlocks.WATER_KETTLE.get().getDefaultState();
-				break;
-			default:
-				upgradedState = ModBlocks.WATER_KETTLE.get().getDefaultState().with(FilledKettleBlock.HOT, true);
-				break;
-		}
-		
-		worldIn.setBlockState(pos, upgradedState.with(KettleBlock.FACING, state.get(LegacyKettleBlock.FACING)));
-	}
-	*/
-	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING, CONTENT, FULLNESS, FilledKettleBlock.LIT);

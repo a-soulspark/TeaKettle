@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class SimplyCupBlock extends CupBlock {
-	public ResourceLocation itemName;
+	public final ResourceLocation itemName;
 	public Item item;
 	
 	public SimplyCupBlock(ResourceLocation name, Properties properties) {

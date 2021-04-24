@@ -56,7 +56,12 @@
 					],
 					"name": "tea_kettle:boiling_kettle"
 				}
-			]
+			],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
 		}
 	]
 }

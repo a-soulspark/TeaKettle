@@ -5,6 +5,9 @@
 		{
 			"id": "farmersdelight:stove",
 			"required": false
+		},{
+			"id": "supplementaries:magma_cream_block",
+			"required": false
 		}
 	]
 }
