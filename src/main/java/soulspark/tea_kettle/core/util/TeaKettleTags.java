@@ -9,7 +9,7 @@ import net.minecraft.tags.ItemTags;
 public class TeaKettleTags {
 	public static final ITag<Block> HOT = BlockTags.makeWrapperTag("tea_kettle:hot");
 	public static final ITag<Block> FURNACES = BlockTags.makeWrapperTag("tea_kettle:furnaces");
-	public static final ITag<Item> KETTLES = ItemTags.makeWrapperTag("tea_kettle:kettles");
+	public static final ITag<Item> HOT_KETTLES = ItemTags.makeWrapperTag("tea_kettle:hot_kettles");
 	public static final ITag<Item> BOILING_KETTLES = ItemTags.makeWrapperTag("tea_kettle:boiling_kettles");
 	public static final ITag<Item> FROTHING_KETTLES = ItemTags.makeWrapperTag("tea_kettle:frothing_kettles");
 	public static final ITag<Item> WEAK_SWEENETERS = ItemTags.makeWrapperTag("tea_kettle:weak_sweeteners");

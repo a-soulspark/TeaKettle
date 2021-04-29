@@ -8,8 +8,8 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -35,8 +35,8 @@ public class SimplyTeaBlock extends ExternalTeaBlock {
 	}
 	
 	@Override
-	public ItemStack getGrabStack(BlockState state, World world, BlockPos pos) {
-		ItemStack teaStack = super.getGrabStack(state, world, pos);
+	public ItemStack getGrabStack(BlockState state, World world, TileEntity tileEntity) {
+		ItemStack teaStack = super.getGrabStack(state, world, tileEntity);
 		teaStack.getOrCreateTag().putInt("Damage", state.get(FULLNESS) % 2);
 		return teaStack;
 	}

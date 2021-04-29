@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:block/campfire",
+	"textures": {
+		"fire": "tea_kettle:block/campfire_fire"
+	}
+}

@@ -32,19 +32,21 @@ public class FilledKettleBlock extends KettleBlock {
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final BooleanProperty HOT = BooleanProperty.create("hot");
 	public static final IntegerProperty FULLNESS = IntegerProperty.create("fullness", 1, 4);
+	public static final VoxelShape SHAPE = VoxelShapes.or(KettleBlock.SHAPE, makeCuboidShape(6.0D, 6.0D, 6.0D, 10.0D, 7.0D, 10.0D));
 	
-	private final Function<Boolean, Item> itemSupplier;
+	private final Function<BlockState, Item> itemSupplier;
 	
-	public FilledKettleBlock(Function<Boolean, Item> itemSupplier, Properties builder) {
+	public FilledKettleBlock(Function<BlockState, Item> itemSupplier, Properties builder) {
 		super(builder);
 		this.itemSupplier = itemSupplier;
 		
-		setDefaultState(getDefaultState().with(HOT, false).with(LIT, false).with(FULLNESS, 4));
+		BlockState defaultState = getDefaultState().with(HOT, false).with(FULLNESS, 4);
+		setDefaultState(stateContainer.getProperty(LIT.getName()) != null ? defaultState.with(LIT, false) : defaultState);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return VoxelShapes.or(SHAPE, Block.makeCuboidShape(6.0D, 6.0D, 6.0D, 10.0D, 7.0D, 10.0D));
+		return SHAPE;
 	}
 	
 	@Override
@@ -67,14 +69,14 @@ public class FilledKettleBlock extends KettleBlock {
 	@Override
 	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		BlockState state = super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-		if (state.getBlock() == this) return state.with(LIT, isHot(worldIn, facingPos));
+		if (!(state.getBlock() instanceof CampfireKettleBlock) && state.getBlock() == this) return state.with(LIT, isHot(worldIn, facingPos));
 		return state;
 	}
 	
 	@Override
-	public ItemStack getGrabStack(BlockState state, World worldIn, BlockPos pos) {
-		ItemStack kettleStack = new ItemStack(itemSupplier.apply(state.get(HOT)));
-		kettleStack.setTagInfo("BlockEntityTag", worldIn.getTileEntity(pos).serializeNBT());
+	public ItemStack getGrabStack(BlockState state, World worldIn, TileEntity tileEntity) {
+		ItemStack kettleStack = new ItemStack(itemSupplier.apply(state));
+		kettleStack.setTagInfo("BlockEntityTag", tileEntity.serializeNBT());
 		// stores the "fullness" blockstate into the BlockStateTag nbt of the item
 		CompoundNBT blockStates = new CompoundNBT();
 		blockStates.putInt("fullness", state.get(FULLNESS));

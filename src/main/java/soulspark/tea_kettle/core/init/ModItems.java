@@ -7,6 +7,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import soulspark.tea_kettle.TeaKettle;
+import soulspark.tea_kettle.common.blocks.CampfireKettleBlock.Content;
 import soulspark.tea_kettle.common.blocks.TeaBlock;
 import soulspark.tea_kettle.common.items.*;
 
@@ -19,24 +20,22 @@ public class ModItems {
 	private static final Item.Properties KETTLE_PROPERTIES = new Item.Properties().maxStackSize(1);
 	public static final ArrayList<RegistryObject<TeaItem>> TEAS = new ArrayList<>();
 	
-	// TODO: update all items to use new register() method
-	
 	public static final RegistryObject<LegacyKettleItem> LEGACY_KETTLE = ITEMS.register("kettle", () -> new LegacyKettleItem(KETTLE_PROPERTIES));
 	
 	public static final RegistryObject<EmptyKettleItem> EMPTY_KETTLE = ITEMS.register("empty_kettle", () ->
 			new EmptyKettleItem(ModBlocks.EMPTY_KETTLE.get(), KETTLE_PROPERTIES.group(ItemGroup.DECORATIONS).maxStackSize(16)));
 	
 	public static final RegistryObject<FilledKettleItem> WATER_KETTLE = ITEMS.register("water_kettle", () ->
-			new FilledKettleItem(ModBlocks.WATER_KETTLE.get(), false, KETTLE_PROPERTIES.group(ItemGroup.SEARCH).maxStackSize(1)));
+			new FilledKettleItem(ModBlocks.WATER_KETTLE.get(), false, Content.WATER, KETTLE_PROPERTIES.group(ItemGroup.SEARCH).maxStackSize(1)));
 	
 	public static final RegistryObject<FilledKettleItem> BOILING_KETTLE = ITEMS.register("boiling_kettle", () ->
-			new FilledKettleItem(ModBlocks.WATER_KETTLE.get(), true, KETTLE_PROPERTIES.group(ItemGroup.DECORATIONS).containerItem(EMPTY_KETTLE.get())));
+			new FilledKettleItem(ModBlocks.WATER_KETTLE.get(), true, Content.WATER, KETTLE_PROPERTIES.group(ItemGroup.DECORATIONS).containerItem(EMPTY_KETTLE.get())));
 	
 	public static final RegistryObject<FilledKettleItem> MILK_KETTLE = ITEMS.register("milk_kettle", () ->
-			new FilledKettleItem(ModBlocks.MILK_KETTLE.get(), false, KETTLE_PROPERTIES.group(ItemGroup.SEARCH)));
+			new FilledKettleItem(ModBlocks.MILK_KETTLE.get(), false, Content.MILK, KETTLE_PROPERTIES.group(ItemGroup.SEARCH)));
 	
 	public static final RegistryObject<FilledKettleItem> FROTHING_KETTLE = ITEMS.register("frothing_kettle", () ->
-			new FilledKettleItem(ModBlocks.MILK_KETTLE.get(), true, KETTLE_PROPERTIES.group(ItemGroup.DECORATIONS).containerItem(EMPTY_KETTLE.get())));
+			new FilledKettleItem(ModBlocks.MILK_KETTLE.get(), true, Content.MILK, KETTLE_PROPERTIES.group(ItemGroup.DECORATIONS).containerItem(EMPTY_KETTLE.get())));
 	
 	public static final RegistryObject<CupItem> CUP = ITEMS.register("cup", () ->
 			new CupItem(ModBlocks.CUP.get(), new Item.Properties().group(ItemGroup.DECORATIONS).maxStackSize(16)));

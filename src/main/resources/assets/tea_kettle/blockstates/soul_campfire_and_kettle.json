@@ -1,0 +1,16 @@
+{
+	"multipart": [
+		{ "when": { "facing": "north" }, "apply": { "model": "tea_kettle:block/soul_campfire", "y": 180 }},
+		{ "when": { "facing": "west" }, "apply": { "model": "tea_kettle:block/soul_campfire", "y": 90 }},
+		{ "when": { "facing": "south" }, "apply": { "model": "tea_kettle:block/soul_campfire" }},
+		{ "when": { "facing": "east" }, "apply": { "model": "tea_kettle:block/soul_campfire", "y": 270 }},
+		{ "when": { "facing": "north", "content": "water" }, "apply": { "model": "tea_kettle:block/campfire_water_kettle", "y": 180 }},
+		{ "when": { "facing": "west", "content": "water" }, "apply": { "model": "tea_kettle:block/campfire_water_kettle", "y": 90 }},
+		{ "when": { "facing": "south", "content": "water" }, "apply": { "model": "tea_kettle:block/campfire_water_kettle" }},
+		{ "when": { "facing": "east", "content": "water" }, "apply": { "model": "tea_kettle:block/campfire_water_kettle", "y": 270 }},
+		{ "when": { "facing": "north", "content": "milk" }, "apply": { "model": "tea_kettle:block/campfire_milk_kettle", "y": 180 }},
+		{ "when": { "facing": "west", "content": "milk" }, "apply": { "model": "tea_kettle:block/campfire_milk_kettle", "y": 90 }},
+		{ "when": { "facing": "south", "content": "milk" }, "apply": { "model": "tea_kettle:block/campfire_milk_kettle" }},
+		{ "when": { "facing": "east", "content": "milk" }, "apply": { "model": "tea_kettle:block/campfire_milk_kettle", "y": 270 }}
+	]
+}

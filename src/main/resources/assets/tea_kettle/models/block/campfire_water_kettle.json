@@ -1,0 +1,16 @@
+{
+	"loader": "tea_kettle:composite",
+	"parts": {
+		"support": {
+			"parent": "tea_kettle:block/campfire_kettle_support"
+		},
+		"kettle": {
+			"parent": "tea_kettle:block/water_kettle"
+		}
+	},
+	"transforms": {
+		"kettle": {
+			"y": 0.5
+		}
+	}
+}

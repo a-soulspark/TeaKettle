@@ -5,11 +5,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.CauldronBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -28,6 +28,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
+import soulspark.tea_kettle.common.blocks.CampfireKettleBlock;
 import soulspark.tea_kettle.common.blocks.IGrabbable;
 import soulspark.tea_kettle.core.compat.CompatHandler;
 import soulspark.tea_kettle.core.init.ModBlocks;
@@ -77,22 +78,22 @@ public class CommonEvents {
 		ItemStack handStack = event.getItemStack();
 		Item item = handStack.getItem();
 		PlayerEntity player = event.getPlayer();
-		BlockState state = world.getBlockState(event.getPos());
+		BlockPos pos = event.getPos();
+		BlockState state = world.getBlockState(pos);
 		
 		// grabbing milk from CfB's milk jars
 		if (CompatHandler.onRightClickBlock(event) != ActionResultType.PASS) return;
 		// grabbing blocks (like cups and kettles) while sneaking
-		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable) {
+		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable && (!(state.getBlock() instanceof CampfireKettleBlock) || ((CampfireKettleBlock) state.getBlock()).isKettleSelected(pos, player))) {
 			IGrabbable grabbable = (IGrabbable) state.getBlock();
-			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), event.getPos()).copy();
+			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), pos).copy();
 			
 			if (handStack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
 			else if (handStack.isItemEqual(grabStack) && handStack.getCount() < handStack.getMaxStackSize()) handStack.grow(1);
 			else if (!player.inventory.addItemStackToInventory(grabStack)) return;
 			
-			if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 			else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
-			grabbable.grab(event.getWorld(), event.getPos());
+			grabbable.grab(event.getWorld(), pos);
 			
 			event.setCanceled(true);
 			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
@@ -101,7 +102,7 @@ public class CommonEvents {
 		else if (handStack.getItem() == ModItems.EMPTY_KETTLE.get() && state.getBlock() == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
 			player.setHeldItem(event.getHand(), DrinkHelper.fill(handStack.copy(), player, new ItemStack(ModItems.WATER_KETTLE.get())));
 			world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-			((CauldronBlock) Blocks.CAULDRON).setWaterLevel(world, event.getPos(), state, 0);
+			((CauldronBlock) Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
 			
 			event.setCanceled(true);
 			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
@@ -113,7 +114,7 @@ public class CommonEvents {
 				if (handStack.hasTag()) blockItemStack.setTag(handStack.getTag().copy());
 				
 				ActionResultType result = blockItem.tryPlace(new BlockItemUseContext(player, event.getHand(), blockItemStack,
-						new BlockRayTraceResult(player.getLookVec(), event.getFace(), event.getPos(), false)));
+						new BlockRayTraceResult(player.getLookVec(), event.getFace(), pos, false)));
 				
 				if (result.isSuccessOrConsume()) {
 					if (!player.abilities.isCreativeMode) handStack.shrink(1);

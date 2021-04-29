@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
@@ -14,6 +13,7 @@ import net.minecraft.particles.BasicParticleType;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -86,8 +86,7 @@ public class TeaBlock extends Block implements IGrabbable {
 				ItemStack teaStack = getGrabStack(state, worldIn, pos);
 				
 				if (stack.isEmpty()) player.setHeldItem(handIn, teaStack);
-				// send the update to clients and remove the block
-				((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
+				// grab the block
 				grab(worldIn, pos);
 			}
 			// in the client, just play a little equip sound because you can't do anything drop-related there
@@ -101,7 +100,6 @@ public class TeaBlock extends Block implements IGrabbable {
 			// empty the kettle if player isn't in creative mode
 			if (!player.abilities.isCreativeMode) {
 				player.setHeldItem(handIn, stack.getContainerItem());
-				if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 			}
 			
 			// play a sound
@@ -123,8 +121,6 @@ public class TeaBlock extends Block implements IGrabbable {
 						stack.shrink(1);
 						if (stack.isEmpty()) player.setHeldItem(handIn, returnStack);
 						else player.addItemStackToInventory(returnStack);
-						
-						if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 					}
 					
 					// update the kettle to be filled with water
@@ -141,7 +137,7 @@ public class TeaBlock extends Block implements IGrabbable {
 	}
 	
 	@Override
-	public ItemStack getGrabStack(BlockState state, World world, BlockPos pos) {
+	public ItemStack getGrabStack(BlockState state, World world, TileEntity tileEntity) {
 		ItemStack teaStack = new ItemStack(asItem());
 		CompoundNBT tag = teaStack.getOrCreateTag();
 		CompoundNBT blockStateTag = tag.getCompound("BlockStateTag");

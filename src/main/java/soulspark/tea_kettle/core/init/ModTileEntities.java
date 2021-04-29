@@ -17,7 +17,7 @@ public class ModTileEntities {
 	public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, TeaKettle.MODID);
 	
 	public static final RegistryObject<TileEntityType<LegacyKettleTileEntity>> LEGACY_KETTLE = TILE_ENTITIES.register("kettle", () -> TileEntityType.Builder.create(LegacyKettleTileEntity::new, ModBlocks.LEGACY_KETTLE.get()).build(null));
-	public static final RegistryObject<TileEntityType<KettleTileEntity>> FILLED_KETTLE = TILE_ENTITIES.register("filled_kettle", () -> TileEntityType.Builder.create(KettleTileEntity::new, ModBlocks.WATER_KETTLE.get(), ModBlocks.MILK_KETTLE.get()).build(null));
+	public static final RegistryObject<TileEntityType<KettleTileEntity>> FILLED_KETTLE = TILE_ENTITIES.register("filled_kettle", () -> TileEntityType.Builder.create(KettleTileEntity::new, ModBlocks.WATER_KETTLE.get(), ModBlocks.MILK_KETTLE.get(), ModBlocks.CAMPFIRE_AND_KETTLE.get(), ModBlocks.SOUL_CAMPFIRE_AND_KETTLE.get()).build(null));
 	public static final RegistryObject<TileEntityType<CupTileEntity>> CUP = TILE_ENTITIES.register("cup", () -> TileEntityType.Builder.create(CupTileEntity::new, Arrays.copyOf(ModBlocks.CUPS.toArray(), ModBlocks.CUPS.size(), Block[].class)).build(null));
 	
 }

@@ -3,11 +3,11 @@ package soulspark.tea_kettle.common.blocks;
 import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -75,8 +75,6 @@ public class KettleBlock extends Block implements IGrabbable {
 			if (!worldIn.isRemote) {// spawns in a new KettleItem stack and gives it the BlockEntityTag corresponding to this block's TileEntity
 				ItemStack stack = getGrabStack(state, worldIn, pos);
 				player.setHeldItem(handIn, stack);
-				if (player instanceof ServerPlayerEntity)
-					((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 				
 				// breaks the kettle block and sends the Kettle item straight to the player's inventory
 				worldIn.removeBlock(pos, false);
@@ -89,7 +87,7 @@ public class KettleBlock extends Block implements IGrabbable {
 	}
 	
 	@Override
-	public ItemStack getGrabStack(BlockState state, World worldIn, BlockPos pos) {
+	public ItemStack getGrabStack(BlockState state, World worldIn, TileEntity tileEntity) {
 		return new ItemStack(ModItems.EMPTY_KETTLE.get());
 	}
 	

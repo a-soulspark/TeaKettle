@@ -2,7 +2,6 @@ package soulspark.tea_kettle.common.blocks;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -34,7 +33,6 @@ public class EmptyKettleBlock extends KettleBlock {
 					if (!player.abilities.isCreativeMode) {
 						// replace the hand with a glass bottle, water bottles aren't stackable after all
 						player.setHeldItem(handIn, new ItemStack(Items.GLASS_BOTTLE));
-						if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 					}
 					
 					// update the kettle to be filled with water
@@ -49,7 +47,6 @@ public class EmptyKettleBlock extends KettleBlock {
 					if (!player.abilities.isCreativeMode) {
 						// replace the hand with a glass bottle, water bottles aren't stackable after all
 						player.setHeldItem(handIn, new ItemStack(Items.BUCKET));
-						if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 					}
 					
 					// update the kettle to be filled with water

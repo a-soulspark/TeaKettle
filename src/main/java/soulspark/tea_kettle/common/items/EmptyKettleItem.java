@@ -101,12 +101,6 @@ public class EmptyKettleItem extends KettleItem {
 		return DrinkHelper.fill(emptyStack, player, stack);
 	}
 	
-/*
-	TODO:
-	 > the brewing of kool tea
-	  >> how steam doe??
-*/
-	
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {

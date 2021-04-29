@@ -6,7 +6,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
@@ -102,6 +101,7 @@ public class CupBlock extends Block implements IGrabbable {
 			if (handIn == Hand.MAIN_HAND) {
 				ItemStack cupStack = cupTileEntity.handler.getLastStack();
 				// if the cup is empty, put it in your hand
+				// otherwise, get the item in the cup and gives it to the player
 				if (cupStack.isEmpty()) {
 					// if the world is remote, skip all of it and just say "success"
 					if (!worldIn.isRemote) {
@@ -109,25 +109,18 @@ public class CupBlock extends Block implements IGrabbable {
 						// if the cup is the same as the cup you're holding, increase the stack by 1
 						if (!player.abilities.isCreativeMode) blockStack.grow(handStack.getCount());
 						player.setHeldItem(handIn, blockStack);
-						// send the update to clients and remove the block
-						((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
+						// remove the block
 						worldIn.removeBlock(pos, false);
 					}
 					else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
-				} else {
-					// gets the item in the cup and gives it to the player
-					player.setHeldItem(handIn, cupStack.split(64));
-					//((ServerPlayerEntity)player).sendContainerToPlayer(player.container);
-					// removes the item from the cup
-					//cupTileEntity.handler.setStack(ItemStack.EMPTY);
-				}
+				} else player.setHeldItem(handIn, cupStack.split(64));
 				
 				// only gets this far if !worldIn.isRemote()
 				return ActionResultType.func_233537_a_(worldIn.isRemote);
 			}
 		}
 		else {
-			if (handStack.getItem().isIn(TeaKettleTags.KETTLES)) {
+			if (handStack.getItem().isIn(TeaKettleTags.HOT_KETTLES)) {
 				// if the cup has an ingredient and the item used is a kettle with hot water
 				if (!cupTileEntity.handler.isEmpty()) {
 					// tries getting the recipe for the given ingredient
@@ -136,7 +129,6 @@ public class CupBlock extends Block implements IGrabbable {
 					// empty the kettle if player isn't in creative mode
 					if (!player.abilities.isCreativeMode) {
 						player.setHeldItem(handIn, handStack.getContainerItem());
-						if (player instanceof ServerPlayerEntity) ((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 					}
 					
 					// play a sound
@@ -160,8 +152,6 @@ public class CupBlock extends Block implements IGrabbable {
 						if (!player.abilities.isCreativeMode) {
 							// takes one item from the player's hand
 							handStack.shrink(1);
-							if (player instanceof ServerPlayerEntity)
-								((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
 						}
 						
 						player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
@@ -190,8 +180,7 @@ public class CupBlock extends Block implements IGrabbable {
 	}
 	
 	@Override
-	public ItemStack getGrabStack(BlockState state, World world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+	public ItemStack getGrabStack(BlockState state, World world, TileEntity tileEntity) {
 		if (tileEntity instanceof CupTileEntity) {
 			CupTileEntity cupTileEntity = (CupTileEntity) tileEntity;
 			ItemStack cupStack = cupTileEntity.handler.getLastStack();
@@ -222,7 +211,8 @@ public class CupBlock extends Block implements IGrabbable {
 			if (ModBlocks.TEA_ITEM_TO_BLOCK.containsKey(item.getRegistryName())) item = ModBlocks.TEA_ITEM_TO_BLOCK.get(item.getRegistryName());
 			// if the item is a BlockItem, get the block of that item and sets this cup to that
 			if (item instanceof BlockItem) {
-				worldIn.setBlockState(pos, ((BlockItem) item).getBlock().getDefaultState().with(FACING, state.get(FACING)));
+				Block teaBlock = ((BlockItem) item).getBlock();
+				worldIn.setBlockState(pos, teaBlock.getDefaultState().with(FACING, state.get(FACING)));
 				return true;
 			}
 		}

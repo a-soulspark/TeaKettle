@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import soulspark.tea_kettle.common.blocks.CampfireKettleBlock;
 import soulspark.tea_kettle.common.blocks.FilledKettleBlock;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.core.init.ModParticles;
@@ -30,7 +31,7 @@ public class KettleTileEntity extends TileEntity implements ITickableTileEntity 
 		if (world == null) return;
 		
 		BlockState state = getBlockState();
-		boolean lit = state.get(FilledKettleBlock.LIT);
+		boolean lit = state.getBlock() instanceof CampfireKettleBlock || state.get(FilledKettleBlock.LIT);
 		boolean hot = state.get(FilledKettleBlock.HOT);
 		
 		if (world.isRemote) {
@@ -38,7 +39,7 @@ public class KettleTileEntity extends TileEntity implements ITickableTileEntity 
 			// chance increases with boiling ticks
 			if (Math.random() <= chance) {
 				BlockPos offset = pos.offset(state.get(KettleBlock.FACING).rotateYCCW()).subtract(pos);
-				world.addParticle(ModParticles.STEAM.get(), pos.getX() + 0.5f + offset.getX() * 0.45f, pos.getY() + 0.35f, pos.getZ() + 0.5f + offset.getZ() * 0.45f, offset.getX() * 0.03 * chance, 0.05D * chance, offset.getZ() * 0.03 * chance);
+				world.addParticle(ModParticles.STEAM.get(), pos.getX() + 0.5f + offset.getX() * 0.45f, pos.getY() + (state.getBlock() instanceof CampfireKettleBlock ? 0.7875f : 0.35f), pos.getZ() + 0.5f + offset.getZ() * 0.45f, offset.getX() * 0.03 * chance, 0.05D * chance, offset.getZ() * 0.03 * chance);
 			}
 		} else if (!hot) {
 			if (lit) {

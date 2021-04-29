@@ -11,6 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import soulspark.tea_kettle.TeaKettle;
+import soulspark.tea_kettle.client.CampfireKettleModel;
 import soulspark.tea_kettle.client.CupTileEntityRenderer;
 import soulspark.tea_kettle.client.TeaModel;
 import soulspark.tea_kettle.core.util.TeaKettleUtils;
@@ -21,6 +22,8 @@ public class ClientInitEvents {
 		RenderTypeLookup.setRenderLayer(ModBlocks.CUP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.EMPTY_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.WATER_KETTLE.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModBlocks.CAMPFIRE_AND_KETTLE.get(), RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModBlocks.SOUL_CAMPFIRE_AND_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.MILK_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.TEA_BUSH.get(), RenderType.getCutout());
 		
@@ -48,6 +51,7 @@ public class ClientInitEvents {
 	@SubscribeEvent
 	public static void onModelRegistry(ModelRegistryEvent event) {
 		ModelLoaderRegistry.registerLoader(new ResourceLocation(TeaKettle.MODID, "tea"), TeaModel.Loader.INSTANCE);
+		ModelLoaderRegistry.registerLoader(new ResourceLocation(TeaKettle.MODID, "composite"), CampfireKettleModel.Loader.INSTANCE);
 	}
 	
 	@SubscribeEvent
