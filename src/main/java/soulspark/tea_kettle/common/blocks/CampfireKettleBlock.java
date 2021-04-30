@@ -49,8 +49,11 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 	public static final VoxelShape CAMPFIRE_SHAPE = makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D);
 	public static final EnumProperty<Content> CONTENT = EnumProperty.create("content", Content.class);
 	
-	public CampfireKettleBlock(Function<BlockState, Item> itemSupplier, Properties builder) {
+	private final Block baseBlock;
+	
+	public CampfireKettleBlock(Function<BlockState, Item> itemSupplier, Block baseBlock, Properties builder) {
 		super(itemSupplier, builder);
+		this.baseBlock = baseBlock;
 		setDefaultState(getDefaultState().with(CONTENT, Content.WATER));
 	}
 	
@@ -78,7 +81,7 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 		if (!isKettleSelected(pos, player)) return ActionResultType.PASS;
 		
 		ActionResultType result = super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
-		if (result == ActionResultType.CONSUME) worldIn.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(CampfireBlock.FACING, state.get(FACING)));
+		if (result == ActionResultType.CONSUME) worldIn.setBlockState(pos, baseBlock.getDefaultState().with(CampfireBlock.FACING, state.get(FACING)));
 		
 		return result;
 	}
@@ -97,7 +100,7 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 			world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundType.METAL.getBreakSound(), SoundCategory.BLOCKS, 1, 1);
 			if (!world.isRemote) {
 				if (!player.abilities.isCreativeMode) spawnAsEntity(world, pos, getGrabStack(state, world, pos));
-				world.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(FACING, state.get(FACING)));
+				world.setBlockState(pos, baseBlock.getDefaultState().with(FACING, state.get(FACING)));
 			}
 			else Minecraft.getInstance().particles.addBlockDestroyEffects(pos, state);
 			
@@ -114,7 +117,7 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 	
 	@Override
 	public void grab(World world, BlockPos pos) {
-		if (!world.isRemote) world.setBlockState(pos, Blocks.CAMPFIRE.getDefaultState().with(FACING, world.getBlockState(pos).get(FACING)));
+		if (!world.isRemote) world.setBlockState(pos, baseBlock.getDefaultState().with(FACING, world.getBlockState(pos).get(FACING)));
 	}
 	
 	@Override

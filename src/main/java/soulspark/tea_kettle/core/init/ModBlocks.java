@@ -1,9 +1,6 @@
 package soulspark.tea_kettle.core.init;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
@@ -47,10 +44,10 @@ public class ModBlocks {
 			new FilledKettleBlock(state -> state.get(FilledKettleBlock.HOT) ? ModItems.FROTHING_KETTLE.get() : ModItems.MILK_KETTLE.get(), KETTLE_PROPERTIES));
 	
 	public static final RegistryObject<FilledKettleBlock> CAMPFIRE_AND_KETTLE = BLOCKS.register("campfire_and_kettle", () ->
-			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 11).notSolid()));
+			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, Blocks.CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 11).notSolid()));
 	
 	public static final RegistryObject<FilledKettleBlock> SOUL_CAMPFIRE_AND_KETTLE = BLOCKS.register("soul_campfire_and_kettle", () ->
-			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 6).notSolid()));
+			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, Blocks.SOUL_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 6).notSolid()));
 	
 	public static final RegistryObject<CupBlock> CUP = BLOCKS.register("cup", () ->
 			new CupBlock(CUP_PROPERTIES));
