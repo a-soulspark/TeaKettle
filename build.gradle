@@ -116,6 +116,7 @@ dependencies {
     implementation fg.deobf("com.minecraftabnormals:abnormals-core:1.16.5-3.1.1")
     implementation fg.deobf("libs:Abundance-1.16.5:1.0.5")
     implementation fg.deobf("libs:neapolitan-1.16.5:2.1.0")
+    implementation fg.deobf("libs:endergetic-1.16.4:3.0.0")
     //implementation fg.deobf("libs:ironfurnaces-1.16.4:2.5.6")
     //implementation fg.deobf("libs:Redstopia+1.16.4+ver1")
 

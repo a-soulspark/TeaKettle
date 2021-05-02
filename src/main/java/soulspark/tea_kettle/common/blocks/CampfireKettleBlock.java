@@ -25,11 +25,15 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @SuppressWarnings("ConstantConditions")
 public class CampfireKettleBlock extends FilledKettleBlock {
@@ -49,12 +53,18 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 	public static final VoxelShape CAMPFIRE_SHAPE = makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D);
 	public static final EnumProperty<Content> CONTENT = EnumProperty.create("content", Content.class);
 	
-	private final Block baseBlock;
+	private Block baseBlock;
+	private final Supplier<Block> baseBlockSupplier;
 	
-	public CampfireKettleBlock(Function<BlockState, Item> itemSupplier, Block baseBlock, Properties builder) {
+	public CampfireKettleBlock(Function<BlockState, Item> itemSupplier, Supplier<Block> baseBlockSupplier, Properties builder) {
 		super(itemSupplier, builder);
-		this.baseBlock = baseBlock;
+		this.baseBlockSupplier = baseBlockSupplier;
 		setDefaultState(getDefaultState().with(CONTENT, Content.WATER));
+	}
+	
+	public Block getBaseBlock() {
+		if (baseBlock == null) baseBlock = baseBlockSupplier.get();
+		return baseBlock;
 	}
 	
 	@Override
@@ -81,7 +91,7 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 		if (!isKettleSelected(pos, player)) return ActionResultType.PASS;
 		
 		ActionResultType result = super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
-		if (result == ActionResultType.CONSUME) worldIn.setBlockState(pos, baseBlock.getDefaultState().with(CampfireBlock.FACING, state.get(FACING)));
+		if (result == ActionResultType.CONSUME) worldIn.setBlockState(pos, getBaseBlock().getDefaultState().with(CampfireBlock.FACING, state.get(FACING)));
 		
 		return result;
 	}
@@ -100,7 +110,7 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 			world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundType.METAL.getBreakSound(), SoundCategory.BLOCKS, 1, 1);
 			if (!world.isRemote) {
 				if (!player.abilities.isCreativeMode) spawnAsEntity(world, pos, getGrabStack(state, world, pos));
-				world.setBlockState(pos, baseBlock.getDefaultState().with(FACING, state.get(FACING)));
+				world.setBlockState(pos, getBaseBlock().getDefaultState().with(FACING, state.get(FACING)));
 			}
 			else Minecraft.getInstance().particles.addBlockDestroyEffects(pos, state);
 			
@@ -117,7 +127,12 @@ public class CampfireKettleBlock extends FilledKettleBlock {
 	
 	@Override
 	public void grab(World world, BlockPos pos) {
-		if (!world.isRemote) world.setBlockState(pos, baseBlock.getDefaultState().with(FACING, world.getBlockState(pos).get(FACING)));
+		if (!world.isRemote) world.setBlockState(pos, getBaseBlock().getDefaultState().with(FACING, world.getBlockState(pos).get(FACING)));
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if (rand.nextInt(10) == 0) worldIn.playSound(((float) pos.getX() + 0.5F), (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F, SoundEvents.BLOCK_CAMPFIRE_CRACKLE, SoundCategory.BLOCKS, 0.5F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.6F, false);
 	}
 	
 	@Override

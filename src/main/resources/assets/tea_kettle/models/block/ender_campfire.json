@@ -1,0 +1,6 @@
+{
+	"parent": "endergetic:block/ender_campfire",
+	"textures": {
+		"fire": "tea_kettle:block/ender_campfire_fire"
+	}
+}

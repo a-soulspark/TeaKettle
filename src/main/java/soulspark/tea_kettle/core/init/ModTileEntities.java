@@ -10,6 +10,7 @@ import soulspark.tea_kettle.common.tile_entities.CupTileEntity;
 import soulspark.tea_kettle.common.tile_entities.KettleTileEntity;
 import soulspark.tea_kettle.common.tile_entities.LegacyKettleTileEntity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @SuppressWarnings("ConstantConditions")
@@ -17,7 +18,13 @@ public class ModTileEntities {
 	public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, TeaKettle.MODID);
 	
 	public static final RegistryObject<TileEntityType<LegacyKettleTileEntity>> LEGACY_KETTLE = TILE_ENTITIES.register("kettle", () -> TileEntityType.Builder.create(LegacyKettleTileEntity::new, ModBlocks.LEGACY_KETTLE.get()).build(null));
-	public static final RegistryObject<TileEntityType<KettleTileEntity>> FILLED_KETTLE = TILE_ENTITIES.register("filled_kettle", () -> TileEntityType.Builder.create(KettleTileEntity::new, ModBlocks.WATER_KETTLE.get(), ModBlocks.MILK_KETTLE.get(), ModBlocks.CAMPFIRE_AND_KETTLE.get(), ModBlocks.SOUL_CAMPFIRE_AND_KETTLE.get()).build(null));
+	public static final RegistryObject<TileEntityType<KettleTileEntity>> FILLED_KETTLE = TILE_ENTITIES.register("filled_kettle", () -> {
+		ArrayList<Block> blocks = new ArrayList<>(ModBlocks.CAMPFIRE_KETTLES.values());
+		blocks.add(ModBlocks.WATER_KETTLE.get());
+		blocks.add(ModBlocks.MILK_KETTLE.get());
+		TeaKettle.LOGGER.info("PREpARE FOR CHAOS!!!: {}", (Object) Arrays.copyOf(blocks.toArray(), blocks.size(), Block[].class));
+		return TileEntityType.Builder.create(KettleTileEntity::new, Arrays.copyOf(blocks.toArray(), blocks.size(), Block[].class)).build(null);
+	});
 	public static final RegistryObject<TileEntityType<CupTileEntity>> CUP = TILE_ENTITIES.register("cup", () -> TileEntityType.Builder.create(CupTileEntity::new, Arrays.copyOf(ModBlocks.CUPS.toArray(), ModBlocks.CUPS.size(), Block[].class)).build(null));
 	
 }

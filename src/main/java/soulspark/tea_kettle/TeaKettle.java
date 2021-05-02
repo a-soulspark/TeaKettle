@@ -37,6 +37,7 @@ public class TeaKettle {
 		if (ModList.get().isLoaded("simplytea")) CompatHandler.PROXIES.add(new SimplyTeaInteropProxy());
 		if (ModList.get().isLoaded("abundance")) CompatHandler.PROXIES.add(new AbundanceInteropProxy());
 		if (ModList.get().isLoaded("neapolitan")) CompatHandler.PROXIES.add(new NeapolitanInteropProxy());
+		if (ModList.get().isLoaded("endergetic")) CompatHandler.PROXIES.add(new EndergeticInteropProxy());
 		if (ModList.get().isLoaded("supplementaries")) CompatHandler.PROXIES.add(new SupplementariesInteropProxy());
 		if (ModList.get().isLoaded("cookingforblockheads")) CompatHandler.PROXIES.add(new CFBInteropProxy());
 	}

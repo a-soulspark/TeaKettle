@@ -22,8 +22,6 @@ public class ClientInitEvents {
 		RenderTypeLookup.setRenderLayer(ModBlocks.CUP.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.EMPTY_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.WATER_KETTLE.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ModBlocks.CAMPFIRE_AND_KETTLE.get(), RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(ModBlocks.SOUL_CAMPFIRE_AND_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.MILK_KETTLE.get(), RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(ModBlocks.TEA_BUSH.get(), RenderType.getCutout());
 		
@@ -40,6 +38,7 @@ public class ClientInitEvents {
 		RenderTypeLookup.setRenderLayer(ModBlocks.BLACK_LATTE.get(), RenderType.getTranslucent());
 		
 		ModBlocks.TEA_ITEM_TO_BLOCK.forEach((name, item) -> RenderTypeLookup.setRenderLayer(item.getBlock(), RenderType.getCutout()));
+		ModBlocks.CAMPFIRE_KETTLES.forEach((name, item) -> RenderTypeLookup.setRenderLayer(item.getBlock(), RenderType.getCutout()));
 		
 		ItemModelsProperties.registerProperty(ModItems.BOILING_KETTLE.get(), new ResourceLocation(TeaKettle.MODID, "fullness"), TeaKettleUtils::getFullness);
 		ItemModelsProperties.registerProperty(ModItems.BOILING_KETTLE.get(), new ResourceLocation(TeaKettle.MODID, "fullness"), TeaKettleUtils::getFullness);

@@ -1,16 +1,12 @@
 package soulspark.tea_kettle.common.items;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.CampfireTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -25,6 +21,7 @@ import soulspark.tea_kettle.common.blocks.FilledKettleBlock;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.common.tile_entities.KettleTileEntity;
 import soulspark.tea_kettle.core.init.ModBlocks;
+import soulspark.tea_kettle.core.util.TeaKettleUtils;
 
 import javax.annotation.Nullable;
 
@@ -54,7 +51,7 @@ public class FilledKettleItem extends KettleItem {
 		BlockState state = world.getBlockState(context.getPos());
 		
 		// placing kettle on a campfire
-		if (context.getFace() == Direction.UP && state.getBlock().isIn(BlockTags.CAMPFIRES) && tryReplace(context)) return ActionResultType.func_233537_a_(world.isRemote);
+		if (context.getFace() == Direction.UP && ModBlocks.CAMPFIRE_KETTLES.containsKey(state.getBlock()) && tryReplace(context)) return ActionResultType.func_233537_a_(world.isRemote);
 		return super.onItemUse(context);
 	}
 	
@@ -74,7 +71,7 @@ public class FilledKettleItem extends KettleItem {
 		
 		// place a campfire w/ kettle block at the location, copying the FACING state from the previous state and HOT from the item stack used
 		if (!world.isRemote) {
-			world.setBlockState(pos, (state.getBlock() == Blocks.CAMPFIRE ? ModBlocks.CAMPFIRE_AND_KETTLE.get() : ModBlocks.SOUL_CAMPFIRE_AND_KETTLE.get()).getDefaultState().with(KettleBlock.FACING, world.getBlockState(pos).get(CampfireBlock.FACING)).with(CampfireKettleBlock.HOT, isHot).with(CampfireKettleBlock.CONTENT, content));
+			world.setBlockState(pos, ModBlocks.CAMPFIRE_KETTLES.get(state.getBlock()).getDefaultState().with(KettleBlock.FACING, world.getBlockState(pos).get(CampfireBlock.FACING)).with(CampfireKettleBlock.HOT, isHot).with(CampfireKettleBlock.CONTENT, content).with(CampfireKettleBlock.FULLNESS, (int)(TeaKettleUtils.getFullness(context.getItem(), world, player) * 4)));
 			KettleTileEntity kettleTileEntity = (KettleTileEntity) world.getTileEntity(pos);
 			if (kettleTileEntity != null) kettleTileEntity.boilingTicks = context.getItem().getOrCreateChildTag("BlockEntityTag").getInt("BoilingTicks");
 		}

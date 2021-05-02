@@ -6,7 +6,11 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -19,11 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = TeaKettle.MODID)
 public class ModBlocks {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TeaKettle.MODID);
 	public static final ArrayList<CupBlock> CUPS = new ArrayList<>();
 	
 	public static final Map<ResourceLocation, BlockItem> TEA_ITEM_TO_BLOCK = new HashMap<>();
+	public static final Map<Block, Block> CAMPFIRE_KETTLES = new HashMap<>();
 	
 	public static final AbstractBlock.Properties KETTLE_PROPERTIES = AbstractBlock.Properties.create(Material.IRON, MaterialColor.BLUE).hardnessAndResistance(0.5f).sound(SoundType.METAL).notSolid();
 	public static final AbstractBlock.Properties CUP_PROPERTIES = AbstractBlock.Properties.create(Material.ROCK, MaterialColor.WHITE_TERRACOTTA).hardnessAndResistance(0.0f).sound(SoundType.STONE).notSolid();
@@ -44,10 +50,10 @@ public class ModBlocks {
 			new FilledKettleBlock(state -> state.get(FilledKettleBlock.HOT) ? ModItems.FROTHING_KETTLE.get() : ModItems.MILK_KETTLE.get(), KETTLE_PROPERTIES));
 	
 	public static final RegistryObject<FilledKettleBlock> CAMPFIRE_AND_KETTLE = BLOCKS.register("campfire_and_kettle", () ->
-			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, Blocks.CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 11).notSolid()));
+			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, () -> Blocks.CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 11).notSolid()));
 	
 	public static final RegistryObject<FilledKettleBlock> SOUL_CAMPFIRE_AND_KETTLE = BLOCKS.register("soul_campfire_and_kettle", () ->
-			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, Blocks.SOUL_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 6).notSolid()));
+			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, () -> Blocks.SOUL_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 6).notSolid()));
 	
 	public static final RegistryObject<CupBlock> CUP = BLOCKS.register("cup", () ->
 			new CupBlock(CUP_PROPERTIES));
@@ -67,6 +73,12 @@ public class ModBlocks {
 	
 	private static RegistryObject<TeaBlock> registerTea(String name) { return BLOCKS.register(name, () -> new TeaBlock(CUP_PROPERTIES)); }
 	
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		CAMPFIRE_KETTLES.put(Blocks.CAMPFIRE, CAMPFIRE_AND_KETTLE.get());
+		CAMPFIRE_KETTLES.put(Blocks.SOUL_CAMPFIRE, SOUL_CAMPFIRE_AND_KETTLE.get());
+	}
+	
 	public static void registerSimplyTea(ResourceLocation name, IForgeRegistry<Block> registry) {
 		registerExternalBlock(nameIn -> new SimplyTeaBlock(name, CUP_PROPERTIES), name, registry);
 	}
@@ -79,7 +91,7 @@ public class ModBlocks {
 		TEA_ITEM_TO_BLOCK.put(itemName, new BlockItem(block, new Item.Properties()));
 	}
 	
-	private static Item getCampfireAndKettleItem(BlockState state) {
+	public static Item getCampfireAndKettleItem(BlockState state) {
 		if (state.get(CampfireKettleBlock.CONTENT) == CampfireKettleBlock.Content.WATER)
 			return state.get(FilledKettleBlock.HOT) ? ModItems.BOILING_KETTLE.get() : ModItems.WATER_KETTLE.get();
 		return state.get(FilledKettleBlock.HOT) ? ModItems.FROTHING_KETTLE.get() : ModItems.MILK_KETTLE.get();
