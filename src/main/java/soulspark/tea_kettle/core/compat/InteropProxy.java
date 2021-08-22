@@ -10,4 +10,5 @@ public interface InteropProxy {
 	default void registerItems(RegistryEvent.Register<Item> event) {}
 	default void registerBlocks(RegistryEvent.Register<Block> event) {}
 	default ActionResultType onRightClickBlock(PlayerInteractEvent.RightClickBlock event) { return ActionResultType.PASS; }
+    default ActionResultType onEntityInteract(PlayerInteractEvent.EntityInteract event) { return ActionResultType.PASS; }
 }

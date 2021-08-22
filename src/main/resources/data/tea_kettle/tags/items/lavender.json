@@ -1,0 +1,12 @@
+{
+	"values": [
+		{
+			"id": "abundance:lavender",
+			"required": false
+		},
+		{
+			"id": "biomesoplenty:lavender",
+			"required": false
+		}
+	]
+}

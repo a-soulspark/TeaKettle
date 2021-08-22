@@ -1,3 +1,4 @@
+/*
 package soulspark.tea_kettle.core.compat;
 
 import net.mehvahdjukaar.supplementaries.block.blocks.JarBlock;
@@ -45,3 +46,4 @@ public class SupplementariesInteropProxy implements InteropProxy {
 		return ActionResultType.PASS;
 	}
 }
+*/

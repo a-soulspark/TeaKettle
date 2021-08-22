@@ -13,7 +13,7 @@ public class CupTileEntity extends TileEntity {
 	
 	public CupTileEntity() {
 		super(ModTileEntities.CUP.get());
-		handler = new CupItemHandler(2, this::notifyChanged);
+		handler = new CupItemHandler(7, this::notifyChanged);
 	}
 	
 	@Override
@@ -29,9 +29,10 @@ public class CupTileEntity extends TileEntity {
 	
 	void notifyChanged() { notifyChanged(getBlockState()); }
 	
+	@SuppressWarnings("ConstantConditions")
 	void notifyChanged(BlockState oldState) {
 		this.markDirty();
-		if (world != null) world.notifyBlockUpdate(this.getPos(), oldState, this.getBlockState(), 3);
+		getWorld().notifyBlockUpdate(this.getPos(), oldState, this.getBlockState(), 3);
 	}
 	
 	@Override

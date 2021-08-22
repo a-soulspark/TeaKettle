@@ -6,12 +6,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.state.DirectionProperty;
@@ -26,13 +26,14 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import soulspark.tea_kettle.common.recipes.TeaSteepingRecipe;
+import soulspark.tea_kettle.common.recipes.CupDrinkRecipe;
 import soulspark.tea_kettle.common.tile_entities.CupTileEntity;
 import soulspark.tea_kettle.core.init.ModBlocks;
 import soulspark.tea_kettle.core.init.ModRecipeTypes;
-import soulspark.tea_kettle.core.util.TeaKettleTags;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,69 +96,72 @@ public class CupBlock extends Block implements IGrabbable {
 		ItemStack handStack = player.getHeldItem(handIn);
 		boolean handEmpty = handStack.isEmpty();
 		
-		// if main hand is empty, put the cup in it
 		if (handEmpty) {
-			// don't want anything to do with an empty offhand
 			if (handIn == Hand.MAIN_HAND) {
-				ItemStack cupStack = cupTileEntity.handler.getLastStack();
-				// if the cup is empty, put it in your hand
-				// otherwise, get the item in the cup and gives it to the player
-				if (cupStack.isEmpty()) {
-					// if the world is remote, skip all of it and just say "success"
-					if (!worldIn.isRemote) {
-						ItemStack blockStack = getGrabStack(state, worldIn, pos);
-						// if the cup is the same as the cup you're holding, increase the stack by 1
-						if (!player.abilities.isCreativeMode) blockStack.grow(handStack.getCount());
-						player.setHeldItem(handIn, blockStack);
-						// remove the block
+				if (!worldIn.isRemote) {
+					ItemStack cupStack = cupTileEntity.handler.pop();
+					if (cupStack.isEmpty()) {
+						player.setHeldItem(handIn, getGrabStack(state, worldIn, pos));
 						worldIn.removeBlock(pos, false);
-					}
-					else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
-				} else player.setHeldItem(handIn, cupStack.split(64));
-				
-				// only gets this far if !worldIn.isRemote()
-				return ActionResultType.func_233537_a_(worldIn.isRemote);
+					} else
+						player.setHeldItem(handIn, cupStack.split(64));  // otherwise, get the item in the cup and gives it to the player
+					
+					((ServerPlayerEntity) player).sendContainerToPlayer(player.container);
+					return ActionResultType.CONSUME;
+				} else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
 			}
+			
+			return ActionResultType.func_233537_a_(worldIn.isRemote);
 		}
 		else {
-			if (handStack.getItem().isIn(TeaKettleTags.HOT_KETTLES)) {
-				// if the cup has an ingredient and the item used is a kettle with hot water
-				if (!cupTileEntity.handler.isEmpty()) {
-					// tries getting the recipe for the given ingredient
-					if (!tryMakeTea(state, worldIn, pos, cupTileEntity.handler.getStacks().toArray(new ItemStack[2]), handStack)) return ActionResultType.CONSUME;
-					
-					// empty the kettle if player isn't in creative mode
-					if (!player.abilities.isCreativeMode) {
-						player.setHeldItem(handIn, handStack.getContainerItem());
+			ItemStack[] ingredients = new ItemStack[cupTileEntity.handler.getStacks().size() + 1];
+			Iterator<ItemStack> iterator = cupTileEntity.handler.getStacks().iterator();
+			int i = 0;
+			
+			ingredients[i++] = handStack;
+			while (iterator.hasNext()) ingredients[i++] = iterator.next();
+			
+			if (tryMakeTea(state, worldIn, pos, ingredients)) {
+				// empty the kettle if player isn't in creative mode
+				if (!player.abilities.isCreativeMode) {
+					if (handStack.getCount() == 1) player.setHeldItem(handIn, handStack.getContainerItem());
+					else {
+						handStack.shrink(1);
+						player.addItemStackToInventory(handStack.getContainerItem());
 					}
-					
-					// play a sound
-					worldIn.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
-					return ActionResultType.func_233537_a_(worldIn.isRemote);
 				}
+				
+				// play a sound
+				worldIn.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return ActionResultType.func_233537_a_(worldIn.isRemote);
 			}
 			// if a recipe for this exists
 			else {
-				ItemStack cupStack = cupTileEntity.handler.getLastStack();
-				ItemStack[] ingredients = cupStack.isEmpty() ? new ItemStack[] { handStack } : new ItemStack[] { handStack, cupStack };
+				//ItemStack[] ingredients = cupStack.isEmpty() ? new ItemStack[] { handStack } : new ItemStack[] { handStack, cupStack };
+				ItemStack putStack = handStack.copy();
+				putStack.setCount(1);
 				
-				if (isIngredient(ingredients, ModRecipeTypes.TEA_STEEPING, worldIn) || isIngredient(ingredients, ModRecipeTypes.MILKY_DRINK, worldIn)) {
+				NonNullList<ItemStack> newStacks = NonNullList.create();
+				newStacks.addAll(cupTileEntity.handler.getStacks());
+				newStacks.add(putStack);
+				
+				if (isIngredient(condenseStacks(newStacks), worldIn)) {
 					// creates a copy of the used stack with a count of 1, and tries putting in the cup
 					ItemStack copyStack = handStack.copy();
 					copyStack.setCount(1);
-					
+					/*take a look at CampfireBlock.onBlockActivated() to see how THEY do it,
+						desync-less!*/
 					// if it could be added...
-					if (cupTileEntity.handler.addStack(copyStack)) {
-						// don't remove items if is in creative
-						if (!player.abilities.isCreativeMode) {
-							// takes one item from the player's hand
-							handStack.shrink(1);
-						}
-						
+					if (!worldIn.isRemote && cupTileEntity.handler.addStack(copyStack)) {
+						// takes one item from the player's hand, unless if is in creative
+						if (!player.abilities.isCreativeMode) handStack.shrink(1);
 						player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
-						return ActionResultType.func_233537_a_(worldIn.isRemote);
+						
+						return ActionResultType.CONSUME;
 					}
-					return ActionResultType.CONSUME;
+					else if (worldIn.isRemote) player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
+					
+					return ActionResultType.func_233537_a_(worldIn.isRemote);
 				}
 			}
 		}
@@ -166,17 +170,24 @@ public class CupBlock extends Block implements IGrabbable {
 		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
 	}
 	
-	protected <T extends TeaSteepingRecipe> boolean isIngredient(ItemStack[] stacks, IRecipeType<T> recipeType, World world) {
-		if (stacks.length == 0) return false;
-		if (stacks.length == 2) return world.getRecipeManager().getRecipe(ModRecipeTypes.TEA_STEEPING, new Inventory(stacks), world).isPresent() || world.getRecipeManager().getRecipe(ModRecipeTypes.MILKY_DRINK, new Inventory(stacks), world).isPresent();
-		List<T> recipes = world.getRecipeManager().getRecipesForType(recipeType);
+	public HashMap<Item, Integer> condenseStacks(NonNullList<ItemStack> uncondensedStacks) {
+		HashMap<Item, Integer> condensedSet = new HashMap<>();
+		for (ItemStack stack : uncondensedStacks) condensedSet.compute(stack.getItem(), (a, b) -> (b == null ? 0 : b) + stack.getCount());
+		
+		return condensedSet;
+	}
+	
+	protected boolean isIngredient(HashMap<Item, Integer> ingredients, World world) {
+		List<CupDrinkRecipe> recipes = world.getRecipeManager().getRecipesForType(ModRecipeTypes.CUP_DRINK);
 		
 		return recipes.stream().anyMatch(recipe -> {
-			for (ItemStack stack : stacks)
-				if (recipe.getIngredients().stream().noneMatch(ingredient -> ingredient.test(stack))) return false;
+			for (Item item : ingredients.keySet()) {
+				ItemStack stack = new ItemStack(item);
+				if (recipe.getIngredients().stream().skip(1).filter(ingredient -> ingredient.test(stack)).count() < ingredients.get(item))
+					return false;
+			}
 			return true;
 		});
-		//return world.getRecipeManager().getRecipe(, new Inventory(stack), world).isPresent() || world.getRecipeManager().getRecipe(ModRecipeTypes.MILKY_DRINK, new Inventory(stack), world).isPresent();
 	}
 	
 	@Override
@@ -196,16 +207,15 @@ public class CupBlock extends Block implements IGrabbable {
 		if (!(tileEntity instanceof CupTileEntity) || world.isRemote) return;
 		CupTileEntity cupTileEntity = (CupTileEntity)tileEntity;
 		
-		ItemStack cupStack = cupTileEntity.handler.getLastStack();
+		ItemStack cupStack = cupTileEntity.handler.pop();
 		if (cupStack.isEmpty()) world.removeBlock(pos, false);
-		else cupTileEntity.handler.setLastStack(ItemStack.EMPTY);
 	}
 	
-	private boolean tryMakeTea(BlockState state, World worldIn, BlockPos pos, ItemStack[] ingredients, ItemStack handStack) {
-		Optional<?> optional = handStack.getItem().isIn(TeaKettleTags.BOILING_KETTLES) ? worldIn.getRecipeManager().getRecipe(ModRecipeTypes.TEA_STEEPING, new Inventory(ingredients), worldIn) : worldIn.getRecipeManager().getRecipe(ModRecipeTypes.MILKY_DRINK, new Inventory(ingredients), worldIn);
+	private boolean tryMakeTea(BlockState state, World worldIn, BlockPos pos, ItemStack[] ingredients) {
+		Optional<?> optional = worldIn.getRecipeManager().getRecipe(ModRecipeTypes.CUP_DRINK, new Inventory(ingredients), worldIn);
 		
 		if (optional.isPresent()) {
-			TeaSteepingRecipe recipe = (TeaSteepingRecipe) optional.get();
+			CupDrinkRecipe recipe = (CupDrinkRecipe) optional.get();
 			// gets the output item type of the recipe
 			Item item = recipe.getRecipeOutput().getItem();
 			if (ModBlocks.TEA_ITEM_TO_BLOCK.containsKey(item.getRegistryName())) item = ModBlocks.TEA_ITEM_TO_BLOCK.get(item.getRegistryName());

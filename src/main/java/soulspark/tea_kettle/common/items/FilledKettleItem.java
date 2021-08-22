@@ -61,7 +61,7 @@ public class FilledKettleItem extends KettleItem {
 		PlayerEntity player = context.getPlayer();
 		BlockState state = world.getBlockState(pos);
 		
-		if (!canPlace(new BlockItemUseContext(context), state)) return false;
+		if (!state.get(CampfireBlock.LIT) || !canPlace(new BlockItemUseContext(context), state)) return false;
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof CampfireTileEntity) {

@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import soulspark.tea_kettle.TeaKettle;
 import soulspark.tea_kettle.common.recipes.CupMilkingRecipe;
 
-public class CupMilkingRecipeCategory extends TeaSteepingRecipeCategory<CupMilkingRecipe> {
+public class CupMilkingRecipeCategory extends CupDrinkRecipeCategory<CupMilkingRecipe> {
 	public static final ResourceLocation UID = new ResourceLocation(TeaKettle.MODID, "cup_milking");
 	
 	public CupMilkingRecipeCategory(Class<? extends CupMilkingRecipe> recipeClass, IGuiHelper helper) {

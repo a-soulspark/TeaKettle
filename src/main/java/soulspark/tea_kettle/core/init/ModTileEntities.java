@@ -22,7 +22,6 @@ public class ModTileEntities {
 		ArrayList<Block> blocks = new ArrayList<>(ModBlocks.CAMPFIRE_KETTLES.values());
 		blocks.add(ModBlocks.WATER_KETTLE.get());
 		blocks.add(ModBlocks.MILK_KETTLE.get());
-		TeaKettle.LOGGER.info("PREpARE FOR CHAOS!!!: {}", (Object) Arrays.copyOf(blocks.toArray(), blocks.size(), Block[].class));
 		return TileEntityType.Builder.create(KettleTileEntity::new, Arrays.copyOf(blocks.toArray(), blocks.size(), Block[].class)).build(null);
 	});
 	public static final RegistryObject<TileEntityType<CupTileEntity>> CUP = TILE_ENTITIES.register("cup", () -> TileEntityType.Builder.create(CupTileEntity::new, Arrays.copyOf(ModBlocks.CUPS.toArray(), ModBlocks.CUPS.size(), Block[].class)).build(null));

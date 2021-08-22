@@ -10,3 +10,4 @@
 !/COPYING.lesser
 !build.gradle
 !.travis.yml
+/src/generated/

@@ -17,7 +17,7 @@ public class EndergeticInteropProxy implements InteropProxy {
 	
 	@Override
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		ENDER_CAMPFIRE = new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, EEBlocks.ENDER_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 11).notSolid());
+		ENDER_CAMPFIRE = new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, EEBlocks.ENDER_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 13).notSolid());
 		event.getRegistry().register(ENDER_CAMPFIRE.setRegistryName(TeaKettle.MODID, "ender_campfire_and_kettle"));
 	}
 	

@@ -1,0 +1,6 @@
+{
+	"parent": "tea_kettle:block/simply_teas/simply_tea_fluid_low",
+	"textures": {
+		"fluid": "tea_kettle:block/teas/fireweed_tea"
+	}
+}

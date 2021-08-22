@@ -28,6 +28,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
+import soulspark.tea_kettle.common.Config;
 import soulspark.tea_kettle.common.blocks.CampfireKettleBlock;
 import soulspark.tea_kettle.common.blocks.IGrabbable;
 import soulspark.tea_kettle.core.compat.CompatHandler;
@@ -70,7 +71,7 @@ public class CommonEvents {
 				event.getEntityLiving().removePotionEffect(caffeinated);
 		}
 	}
-	
+
 	@SuppressWarnings("ConstantConditions")
 	@SubscribeEvent
 	public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event) {
@@ -80,30 +81,36 @@ public class CommonEvents {
 		PlayerEntity player = event.getPlayer();
 		BlockPos pos = event.getPos();
 		BlockState state = world.getBlockState(pos);
-		
 		// grabbing milk from CfB's milk jars
 		if (CompatHandler.onRightClickBlock(event) != ActionResultType.PASS) return;
 		// grabbing blocks (like cups and kettles) while sneaking
-		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable && (!(state.getBlock() instanceof CampfireKettleBlock) || ((CampfireKettleBlock) state.getBlock()).isKettleSelected(pos, player))) {
-			IGrabbable grabbable = (IGrabbable) state.getBlock();
-			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), pos).copy();
-			
-			if (handStack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
-			else if (handStack.isItemEqual(grabStack) && handStack.getCount() < handStack.getMaxStackSize()) handStack.grow(1);
-			else if (!player.inventory.addItemStackToInventory(grabStack)) return;
-			
-			else player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
-			grabbable.grab(event.getWorld(), pos);
-			
-			event.setCanceled(true);
-			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
-		}
-		// filling up the empty kettle with water from a cauldron
-		else if (handStack.getItem() == ModItems.EMPTY_KETTLE.get() && state.getBlock() == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
+			// filling up the empty kettle with water from a cauldron
+		if (handStack.getItem() == ModItems.EMPTY_KETTLE.get() && state.getBlock() == Blocks.CAULDRON && state.get(CauldronBlock.LEVEL) == 3) {
 			player.setHeldItem(event.getHand(), DrinkHelper.fill(handStack.copy(), player, new ItemStack(ModItems.WATER_KETTLE.get())));
 			world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 			((CauldronBlock) Blocks.CAULDRON).setWaterLevel(world, pos, state, 0);
-			
+
+			event.setCanceled(true);
+			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
+			return;
+		}
+
+		if (!player.canPlayerEdit(pos, event.getFace(), handStack)) return;
+
+		if (event.getHand() == Hand.MAIN_HAND && player.isSneaking() && state.getBlock() instanceof IGrabbable && (!(state.getBlock() instanceof CampfireKettleBlock) || ((CampfireKettleBlock) state.getBlock()).isKettleSelected(pos, player))) {
+			IGrabbable grabbable = (IGrabbable) state.getBlock();
+			ItemStack grabStack = grabbable.getGrabStack(state, event.getWorld(), pos);
+
+			if (handStack.isEmpty()) player.setHeldItem(Hand.MAIN_HAND, grabStack);
+			else {
+				if (handStack.isItemEqual(grabStack) && handStack.getCount() < handStack.getMaxStackSize()) handStack.grow(1);
+				else if (!player.inventory.addItemStackToInventory(grabStack)) return;
+
+				if (world.isRemote) player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
+			}
+
+			grabbable.grab(event.getWorld(), pos);
+
 			event.setCanceled(true);
 			event.setCancellationResult(ActionResultType.func_233537_a_(world.isRemote));
 		}
@@ -112,10 +119,10 @@ public class CommonEvents {
 			if (blockItem != null) {
 				ItemStack blockItemStack = new ItemStack(blockItem);
 				if (handStack.hasTag()) blockItemStack.setTag(handStack.getTag().copy());
-				
+
 				ActionResultType result = blockItem.tryPlace(new BlockItemUseContext(player, event.getHand(), blockItemStack,
 						new BlockRayTraceResult(player.getLookVec(), event.getFace(), pos, false)));
-				
+
 				if (result.isSuccessOrConsume()) {
 					if (!player.abilities.isCreativeMode) handStack.shrink(1);
 					event.setCanceled(true);
@@ -124,7 +131,12 @@ public class CommonEvents {
 			}
 		}
 	}
-	
+
+	@SubscribeEvent
+	public static void onEntityRightClick(PlayerInteractEvent.EntityInteract event) {
+		CompatHandler.onEntityInteract(event);
+	}
+
 	@SubscribeEvent
 	public static void onItemUsed(LivingEntityUseItemEvent.Tick event) {
 		ItemStack handStack = event.getItem();
@@ -144,7 +156,7 @@ public class CommonEvents {
 	public static void onSleepLocationCheck(SleepingLocationCheckEvent event) {
 		LivingEntity entity = event.getEntityLiving();
 		PlayerEntity player = entity instanceof PlayerEntity ? (PlayerEntity) entity : null;
-		
+
 		if (!entity.isPotionActive(ModEffects.ZEN.get()) && entity.isPotionActive(ModEffects.CAFFEINE.get()) && (player == null || player.getSleepTimer() > 50)) {
 			event.setResult(Event.Result.DENY);
 			if (player != null) player.sendStatusMessage(new TranslationTextComponent("block.minecraft.bed.caffeine"), true);
@@ -161,6 +173,8 @@ public class CommonEvents {
 	
 	@SubscribeEvent
 	public static void onWakeUpEvent(SleepFinishedTimeEvent event) {
-		for (PlayerEntity player : event.getWorld().getPlayers()) player.removePotionEffect(ModEffects.ZEN.get());
+		boolean zenActive = false;
+		for (PlayerEntity player : event.getWorld().getPlayers()) zenActive = zenActive || player.removePotionEffect(ModEffects.ZEN.get());
+		if (zenActive && !Config.SKIP_TO_DAWN_ZEN.get()) event.setTimeAddition(event.getNewTime() - 11400);
 	}
 }

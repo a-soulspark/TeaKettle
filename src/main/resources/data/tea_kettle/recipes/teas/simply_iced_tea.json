@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "modid": "simplytea",
+          "type": "forge:mod_loaded"
+        }
+      ],
+      "recipe": {
+        "type": "tea_kettle:cup_drink",
+        "catalyst": {
+          "item": "simplytea:ice_cube"
+        },
+        "ingredients": [
+          {
+            "item": "simplytea:teabag_green"
+          },
+          {
+            "item": "minecraft:apple"
+          }
+        ],
+        "result": "simplytea:cup_tea_iced"
+      }
+    }
+  ]
+}

@@ -79,6 +79,7 @@ public class TeaBlock extends Block implements IGrabbable {
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		ItemStack stack = player.getHeldItem(handIn);
+		if (!player.canPlayerEdit(pos, hit.getFace(), stack)) return ActionResultType.PASS;
 		
 		if (stack.isEmpty() && handIn == Hand.MAIN_HAND) {
 			if (!worldIn.isRemote) {
@@ -139,12 +140,7 @@ public class TeaBlock extends Block implements IGrabbable {
 	@Override
 	public ItemStack getGrabStack(BlockState state, World world, TileEntity tileEntity) {
 		ItemStack teaStack = new ItemStack(asItem());
-		CompoundNBT tag = teaStack.getOrCreateTag();
-		CompoundNBT blockStateTag = tag.getCompound("BlockStateTag");
-		blockStateTag.putString("sweetness", state.get(SWEETNESS).toString());
-		tag.put("BlockStateTag", blockStateTag);
-		teaStack.setTag(tag);
-		
+		fillTeaData(teaStack, state);
 		return teaStack;
 	}
 	
@@ -170,14 +166,20 @@ public class TeaBlock extends Block implements IGrabbable {
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 		List<ItemStack> drops = super.getDrops(state, builder);
 		for (ItemStack drop : drops) {
-			if (drop.getItem() == asItem()) {
-				CompoundNBT tag = drop.getOrCreateTag();
-				CompoundNBT blockStateTag = tag.getCompound("BlockStateTag");
-				blockStateTag.putString("sweetness", state.get(SWEETNESS).toString());
-				tag.put("BlockStateTag", blockStateTag);
-			}
+			if (drop.getItem() == asItem()) fillTeaData(drop, state);
 		}
+		
 		return drops;
+	}
+	
+	protected CompoundNBT fillTeaData(ItemStack stack, BlockState state) {
+		CompoundNBT tag = stack.getOrCreateTag();
+		CompoundNBT blockStateTag = tag.getCompound("BlockStateTag");
+		blockStateTag.putString("sweetness", state.get(SWEETNESS).toString());
+		tag.put("BlockStateTag", blockStateTag);
+		stack.setTag(tag);
+		
+		return tag;
 	}
 	
 	@Override

@@ -32,3 +32,25 @@ logoFile="icon.png" #optional
 authors="a_soulspark" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''Have a tea mod to calm your nerves.'''
+
+[[dependencies.tea_kettle]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.3, 1.17)"
+
+[[dependencies.tea_kettle]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36.1.15,)"
+
+[[dependencies.tea_kettle]]
+    modId="simplytea"
+    mandatory=false
+    versionRange="[2.4.0,)"
+    ordering="AFTER"
+
+[[dependencies.tea_kettle]]
+    modId="supplementaries"
+    mandatory=false
+    versionRange="[0.14.5',)"
+    ordering="AFTER"

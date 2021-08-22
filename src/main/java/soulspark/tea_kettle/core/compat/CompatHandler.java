@@ -36,4 +36,15 @@ public class CompatHandler {
 		}
 		return ActionResultType.PASS;
 	}
+
+	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+		for (InteropProxy proxy : PROXIES) {
+			ActionResultType result = proxy.onEntityInteract(event);
+			if (result != ActionResultType.PASS) {
+				event.setCanceled(true);
+				event.setCancellationResult(result);
+				return;
+			}
+		}
+	}
 }

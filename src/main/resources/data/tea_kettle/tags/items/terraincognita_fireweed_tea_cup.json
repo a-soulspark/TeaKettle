@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "terraincognita:fireweed_tea_cup",
+      "required": false
+    }
+  ]
+}

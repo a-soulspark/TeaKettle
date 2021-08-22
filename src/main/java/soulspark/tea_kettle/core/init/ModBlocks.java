@@ -50,10 +50,10 @@ public class ModBlocks {
 			new FilledKettleBlock(state -> state.get(FilledKettleBlock.HOT) ? ModItems.FROTHING_KETTLE.get() : ModItems.MILK_KETTLE.get(), KETTLE_PROPERTIES));
 	
 	public static final RegistryObject<FilledKettleBlock> CAMPFIRE_AND_KETTLE = BLOCKS.register("campfire_and_kettle", () ->
-			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, () -> Blocks.CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 11).notSolid()));
+			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, () -> Blocks.CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 13).notSolid()));
 	
 	public static final RegistryObject<FilledKettleBlock> SOUL_CAMPFIRE_AND_KETTLE = BLOCKS.register("soul_campfire_and_kettle", () ->
-			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, () -> Blocks.SOUL_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 6).notSolid()));
+			new CampfireKettleBlock(ModBlocks::getCampfireAndKettleItem, () -> Blocks.SOUL_CAMPFIRE, AbstractBlock.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD).setLightLevel(state -> 8).notSolid()));
 	
 	public static final RegistryObject<CupBlock> CUP = BLOCKS.register("cup", () ->
 			new CupBlock(CUP_PROPERTIES));

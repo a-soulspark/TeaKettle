@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    {
-      "id": "simplytea:cup_tea_chai",
-      "required": false
-    }
-  ]
-}

@@ -1,9 +1,10 @@
 package soulspark.tea_kettle.common.items;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,8 +19,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import soulspark.tea_kettle.common.Config;
 import soulspark.tea_kettle.common.blocks.KettleBlock;
 import soulspark.tea_kettle.core.init.ModItems;
+import soulspark.tea_kettle.core.util.TeaKettleTags;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -88,6 +91,15 @@ public class EmptyKettleItem extends KettleItem {
 			if (worldIn.getFluidState(pos).isTagged(FluidTags.WATER)) {
 				// creates a copy of the kettle stack, now with water
 				ItemStack filledStack = new ItemStack(ModItems.WATER_KETTLE.get());
+
+				if (Config.LIMITED_WATER.get()) {
+					BlockState state = worldIn.getBlockState(pos);
+					Direction side = rayTrace.getFace();
+					if (!worldIn.isBlockModifiable(playerIn, pos) || !playerIn.canPlayerEdit(pos.offset(side), side, stack) || !(state.getBlock() instanceof IBucketPickupHandler))
+						return ActionResult.resultFail(stack);
+					((IBucketPickupHandler)state.getBlock()).pickupFluid(worldIn, pos, state);
+				}
+
 				worldIn.playSound(playerIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 				return ActionResult.func_233538_a_(filledStack, worldIn.isRemote);
 			}
@@ -107,15 +119,22 @@ public class EmptyKettleItem extends KettleItem {
 		return new FluidHandlerItemStack(stack, 1000) {
 			@Override
 			public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-				return stack.getFluid() == Fluids.WATER;
+				return stack.getFluid().isIn(TeaKettleTags.TEABLE);
+			}
+			
+			@Override
+			public boolean canFillFluidType(FluidStack fluid) {
+				return fluid.getFluid().isIn(TeaKettleTags.TEABLE);
 			}
 			
 			@Override
 			public int fill(FluidStack resource, FluidAction doFill) {
-				if (resource.getAmount() >= 1000) {
-					super.fill(resource, doFill);
-					container = new ItemStack(ModItems.WATER_KETTLE.get());
-					return 1000;
+				if (resource.getAmount() >= 1000 && resource.getFluid().isIn(TeaKettleTags.TEABLE)) {
+					int result = super.fill(resource, doFill);
+					if (result >= 1000) {
+						container = new ItemStack(ModItems.WATER_KETTLE.get());
+						return 1000;
+					}
 				}
 				return 0;
 			}

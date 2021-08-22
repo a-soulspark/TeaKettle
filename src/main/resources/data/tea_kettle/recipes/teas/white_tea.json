@@ -1,5 +1,8 @@
 {
-	"type": "tea_kettle:tea_steeping",
+	"type": "tea_kettle:cup_drink",
+	"catalyst": {
+		"tag": "tea_kettle:boiling_kettles"
+	},
 	"ingredients": [{ "item": "tea_kettle:white_tea_leaf" }],
 	"result": "tea_kettle:white_tea"
 }

@@ -9,7 +9,10 @@
         }
       ],
       "recipe": {
-        "type": "tea_kettle:milky_drink",
+        "type": "tea_kettle:cup_drink",
+        "catalyst": {
+          "tag": "tea_kettle:frothing_kettles"
+        },
         "ingredients": [
           {
             "item": "minecraft:cocoa_beans"

@@ -9,8 +9,11 @@
         }
       ],
       "recipe": {
-        "type": "tea_kettle:tea_steeping",
-        "ingredients": [{ "item": "abundance:lavender" }, { "tag": "minecraft:leaves" }],
+        "type": "tea_kettle:cup_drink",
+        "catalyst": {
+          "tag": "tea_kettle:boiling_kettles"
+        },
+        "ingredients": [{ "tag": "tea_kettle:lavender" }, { "tag": "minecraft:leaves" }],
         "result": "tea_kettle:abundance_lavender_tea"
       }
     }

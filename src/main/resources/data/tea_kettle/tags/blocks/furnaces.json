@@ -52,6 +52,10 @@
 		{
 			"id": "ironfurnaces:vibranium_furnace",
 			"required": false
+		},
+		{
+			"id": "pizzacraft:oven",
+			"required": false
 		}
 	]
 }
